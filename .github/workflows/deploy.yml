@@ -1,4 +1,4 @@
-name: hanghae-tinder
+name: hanghaetinder-gihub-action
 
 on:
   push:
@@ -49,13 +49,13 @@ jobs:
           cd deploy && zip -r deploy.zip .
 
         # Beanstalk Deploy 플러그인 사용
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v19
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}     # github secrets로 등록한 값 사용
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # github secrets로 등록한 값 사용
-          application_name: helloworld-webapp         # EB application 이름
-          environment_name: Helloworldwebapp-env-1    # EB environment 이름
+          application_name: hanghaetinder-gihub-action       # EB application 이름
+          environment_name: Hanghaetinder-gihub-action-env    # EB environment 이름
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
