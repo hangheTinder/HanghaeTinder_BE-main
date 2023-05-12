@@ -16,6 +16,7 @@ jobs:
         uses: actions/setup-java@v2 # 최신 버전을 쓰고 싶었으나 이슈가 생겨서 기존에 CI에서 쓰던 버전 사용
         with:
           java-version: 17
+          distribution: 'adopt' # or 'zulu'
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
