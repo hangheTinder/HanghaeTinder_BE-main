@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-  workflow_dispatch: # 브랜치 push 뿐만 아니라 수동 실행도 가능하게 해줌
+  workflow_dispatch: # 브랜치 push 뿐 아니라 수동 실행도 가능하게 해줌 
 
 jobs:
   build:
