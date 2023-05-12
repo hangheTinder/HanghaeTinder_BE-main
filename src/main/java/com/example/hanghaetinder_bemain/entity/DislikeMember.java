@@ -1,5 +1,6 @@
 package com.example.hanghaetinder_bemain.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,8 +20,6 @@ public class DislikeMember {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@ManyToOne
-	@JoinColumn(name = "disliked_member_id")
-	private Member dislikeMember;
-
+	@Column(nullable = false)
+	private int member2_id;
 }

@@ -1,7 +1,9 @@
 package com.example.hanghaetinder_bemain.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -25,7 +27,6 @@ public class Member extends Timestamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MEMBER_ID")
 	private Long id;
 
 	@Column(nullable = false)
@@ -49,21 +50,8 @@ public class Member extends Timestamped {
 	@Column(nullable = false)
 	private String img;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(
-		name = "member_favorite",
-		joinColumns = @JoinColumn(name = "member_id"),
-		inverseJoinColumns = @JoinColumn(name = "favorite_id")
-	)
-	private Set<Favorite> favorites = new HashSet<>();
-
 	@OneToMany(mappedBy = "member")
-	private Set<Member> likeMembers = new HashSet<>();
+	private List<MemberFavorite> memberFavoriteList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member")
-	private Set<Member> dislikeMember = new HashSet<>();
-
-	@OneToMany(mappedBy = "member")
-	private Set<Member> matchMember = new HashSet<>();
 
 }
