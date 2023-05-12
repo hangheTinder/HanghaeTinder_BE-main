@@ -22,4 +22,5 @@ public class DislikeMember {
 	@ManyToOne
 	@JoinColumn(name = "disliked_member_id")
 	private Member dislikeMember;
+
 }
