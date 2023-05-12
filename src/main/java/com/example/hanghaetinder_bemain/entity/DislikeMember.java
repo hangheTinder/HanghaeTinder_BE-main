@@ -20,6 +20,6 @@ public class DislikeMember {
 	private Member member;
 
 	@ManyToOne
-	@JoinColumn(name = "disliked_member_id")
+	@JoinColumn(name = "disliked_member_Id")
 	private Member dislikeMember;
 }
