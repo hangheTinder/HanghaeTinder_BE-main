@@ -1,61 +1,57 @@
-name: hanghae-tinder
+name: hanghaetinder-gihub-action
 
 on:
   push:
-    branches:
-      - develop
-  workflow_dispatch: # 브랜치 push 뿐만 아니라 수동 실행도 가능하게 해줌
+    branches: [ develop ] # develop에 push될 때 CD가 일어나도록 핸들링
 
 jobs:
   build:
-    runs-on: ubuntu-latest # 깃허브 액션 스크립트가 작동될 OS 환경 지정
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2 # 프로젝트 코드를 check out
+        uses: actions/checkout@v2
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v2 # 깃허브 액션이 실행될 OS에 Java 설치
+        uses: actions/setup-java@v1 # 최신 버전을 쓰고 싶었으나 이슈가 생겨서 기존에 CI에서 쓰던 버전 사용
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          java-version: 17
+          distribution: 'adopt' # or 'zulu'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew # gradle wrapper를 실행할 수 있도록 권한 부여
+        run: chmod +x ./gradlew
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew clean build # 프로젝트 빌드
+        run: ./gradlew clean build
         shell: bash
 
       - name: Get current time
-        uses: 1466587594/get-current-time@v2  # 빌드 완료 시간 가져오기
+        uses: 1466587594/get-current-time@v2
         id: current-time
         with:
-          format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00"
+          format: YYYY-MM-DDTHH-mm-ss # 다른 포맷으로 변경 가능(MomentJS format syntax)
+          utcOffset: "+09:00" # 한국 시간에 맞추기 위함
 
-      - name: Show Current Time
-        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" # 빌드 완료 시간 출력하기
-        shell: bash
-
-        # gradle build를 통해 만들어진 jar 파일 beanstalk에 배포하기 위한 zip 파일로 만듬
-      - name: Generate deployment package
+        # grandle build를 통해 만들어진 jar를 beanstalk에 배포하기 위한 zip 파일로 만드는 것
+      - name: Generate deployment package 
         run: |
           mkdir -p deploy
-          cp build/libs/*.jar deploy/application.jar
+          cp build/libs/*.jar deploy/application.jar # 빌드 완료 시 jar 파일명을 application.jar로 변경
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
-          cd deploy && zip -r deploy.zip .
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .platform 포함하여 zip 생성
 
         # Beanstalk Deploy 플러그인 사용
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v19
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v21
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}     # github secrets로 등록한 값 사용
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} # github secrets로 등록한 값 사용
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # github secrets로 등록한 값 사용
-          application_name: helloworld-webapp         # EB application 이름
-          environment_name: Helloworldwebapp-env-1    # EB environment 이름
-          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+          application-name: hanghaetinder-gihub-action # EB application 이름
+          environment_name: Hanghaetinder-gihub-action-env # EB environment 이름
+          version_label: Github Action-${{steps.current-time.outputs.formattedTime}} # 배포 버전은 타임스탬프를 이용하여 구분
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 180 # default wait time은 30초이며, 필자의 EB가 느려서 180초로 지정했습니다(지정 안하면 간혹 timeout 발생).
