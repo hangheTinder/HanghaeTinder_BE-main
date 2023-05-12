@@ -57,12 +57,12 @@ public class Member extends Timestamped {
 	private Set<Favorite> favorites = new HashSet<>();
 
 	@OneToMany(mappedBy = "member")
-	private Set<Member> likeMembers = new HashSet<>();
+	private Set<LikeMember> likeMembers = new HashSet<>();
 
 	@OneToMany(mappedBy = "member")
-	private Set<Member> dislikeMember = new HashSet<>();
+	private Set<DislikeMember> dislikeMember = new HashSet<>();
 
 	@OneToMany(mappedBy = "member")
-	private Set<Member> matchMember = new HashSet<>();
+	private Set<MatchMember> matchMember = new HashSet<>();
 
 }
