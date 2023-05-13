@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    group:
+      local:
+        - common
+      dev:
+        - common
+
