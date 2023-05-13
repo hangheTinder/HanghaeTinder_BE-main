@@ -27,35 +27,21 @@ public class MatchMember {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "member1_id")
 	private Member member;
 
 	@ManyToOne
-	@JoinColumn(name = "match_member_id")
-	private Member matchMember;
+	@JoinColumn(name = "member2_id")
+	private Member matchedMember;
 
-/*	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "chat_room_id")
-	private ChatRoom chatRoom;*/
+	private ChatRoom chatRoom;
 
-/*	public MatchMember(Member member, Member matchedMember, ChatRoom chatRoom) {
+	public MatchMember(Member member, Member matchedMember, ChatRoom chatRoom) {
 		this.member = member;
-		this.matchMember = matchedMember;
+		this.matchedMember = matchedMember;
 		this.chatRoom = chatRoom;
-	}
-
-	// getter, setter 메소드
-	public ChatRoom getChatRoom() {
-		return chatRoom;
-	}
-
-	public void setChatRoom(ChatRoom chatRoom) {
-		this.chatRoom = chatRoom;
-	}*/
-
-	public MatchMember(Member member, Member matchedMember) {
-		this.member = member;
-		this.matchMember = matchedMember;
 	}
 
 }

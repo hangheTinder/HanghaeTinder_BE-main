@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.hanghaetinder_bemain.entity.ChatRoom;
 import com.example.hanghaetinder_bemain.repository.ChatRoomRepository;
+import com.example.hanghaetinder_bemain.sevice.chat.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomService chatRoomService;
 
     @GetMapping("/room")
     public String rooms(Model model) {
@@ -31,14 +33,14 @@ public class ChatRoomController {
     @GetMapping("/rooms")
     @ResponseBody
     public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
+        return chatRoomRepository.findAll();
     }
 
-    @PostMapping("/room")
+ /*   @PostMapping("/room")
     @ResponseBody
     public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomRepository.createChatRoom(name);
-    }
+        return chatRoomService.createChatRoom(name);
+    }*/
 
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable String roomId) {
