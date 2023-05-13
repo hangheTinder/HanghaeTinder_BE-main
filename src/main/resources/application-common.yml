@@ -1,4 +1,5 @@
 spring:
+  include: secrets
   config:
     activate:
       on-profile: common
