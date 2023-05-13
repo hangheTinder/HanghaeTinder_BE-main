@@ -32,14 +32,11 @@ jobs:
         run: ./gradlew clean build -x test
         shell: bash
       
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
         with:
           name: Build Artifact
-          path: build-artifacts
-          
-      - name: View application-common.yml
-        run: cat build-artifacts/application-common.yml
+          path: build/application.jar
 
       - name: Get current time
         uses: 1466587594/get-current-time@v2
