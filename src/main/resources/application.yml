@@ -1,7 +1,9 @@
 spring:
   profiles:
+    include: secret
     group:
       local:
         - common
       dev:
         - common
+
