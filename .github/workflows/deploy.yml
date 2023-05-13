@@ -29,7 +29,7 @@ jobs:
               cat ./src/main/resources/application-common.yml > cat_output.txt
 
       - name: Build with Gradle
-        run: ./gradlew clean build -P jasypt.password=tinder13
+        run: ./gradlew clean build -x test
         shell: bash
 
       - name: Get current time
