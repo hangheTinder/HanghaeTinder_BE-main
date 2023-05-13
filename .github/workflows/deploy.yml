@@ -23,7 +23,7 @@ jobs:
         shell: bash
         
       - name : jasypt key 주입 
-        run : echo "${{ JASYPT_SECRET }}" >> ./src/main/resources/application-common.yml
+        run : echo "${{ secrets.JASYPT_SECRET }}" >> ./src/main/resources/application-common.yml
 
       - name: Build with Gradle
         run: ./gradlew clean build
