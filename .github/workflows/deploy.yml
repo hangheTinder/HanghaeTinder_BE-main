@@ -25,7 +25,7 @@ jobs:
         shell: bash
         
       - name : jasypt key 주입 
-        run : echo "${{ secrets.JASYPT_SECRET }}" >> ./src/main/resources/application-common.yml
+        run : echo "${{secrets.JASYPT_SECRET}}" >> ./src/main/resources/application-common.yml
               cat ./src/main/resources/application-common.yml > cat_output.txt
 
       - name: Build with Gradle
@@ -49,7 +49,7 @@ jobs:
       - name: Generate deployment package 
         run: |
           mkdir -p deploy
-          cp build/libs/*.jar deploy/application.jar # 빌드 완료 시 jar 파일명을 application.jar로 변경
+          cp libs/*.jar deploy/application.jar # 빌드 완료 시 jar 파일명을 application.jar로 변경
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
           cp -r .platform deploy/.platform
