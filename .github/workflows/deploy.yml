@@ -14,8 +14,10 @@ jobs:
           ref: develop
       - name: Create application-common.yml
         run: touch ./src/main/resources/application-common.yml
+      - name: 깃허브 시크릿 내용보기 
+        run : echo ${{ secrets.JASYPT_SECRET }} 
       - name: Inject Jasypt secret into application-common.yml
-        run: echo "${{ secrets.JASYPT_SECRET }}" >> ./src/main/resources/application-common.yml
+        run: echo ${{ secrets.JASYPT_SECRET }} >> ./src/main/resources/application-common.yml
       - name: View application-common.yml
         run: cat ./src/main/resources/application-common.yml
 
