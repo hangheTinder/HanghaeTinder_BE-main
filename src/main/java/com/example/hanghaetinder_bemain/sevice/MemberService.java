@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import com.example.hanghaetinder_bemain.dto.resoponse.MemberResponseDto;
 import com.example.hanghaetinder_bemain.entity.ChatRoom;
 import com.example.hanghaetinder_bemain.entity.DislikeMember;
@@ -192,5 +193,6 @@ public class MemberService {
 		}
 		return likeUserIds;
 	}
+
 
 }

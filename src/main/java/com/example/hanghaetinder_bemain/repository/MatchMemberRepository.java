@@ -10,5 +10,5 @@ import com.example.hanghaetinder_bemain.entity.Member;
 
 @Repository
 public interface MatchMemberRepository extends JpaRepository<MatchMember, Long> {
-	MatchMember findByMemberAndMatchMember(Member member, Member matchMember);
+	MatchMember findByMemberAndMatchedMember(Member member, Member matchMember);
 }

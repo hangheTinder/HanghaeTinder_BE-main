@@ -68,7 +68,7 @@ public class Member extends Timestamped {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
 	private Set<DislikeMember> dislikeMember = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
 	private Set<MatchMember> matchMember = new HashSet<>();
 
 	public Member(String userId, String password, String nickname, Gender gender) {

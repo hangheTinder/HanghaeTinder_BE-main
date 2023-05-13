@@ -1,9 +1,11 @@
 package com.example.hanghaetinder_bemain.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class ChatMessage {
+public class ChatMessage extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +28,6 @@ public class ChatMessage {
     private String roomId; // 방번호
     private String sender; // 메시지 보낸사람
     private String message; // 메시지
+
+
 }
