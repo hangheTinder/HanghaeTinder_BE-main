@@ -15,9 +15,9 @@ jobs:
       - name: Create application-common.yml
         run: touch ./src/main/resources/application-common.yml
       - name: Print Secret Value 
-        run : echo ${{ secrets.JASYPT_SECRET }} 
+        run : echo ${{secrets.JASYPT}} 
       - name: Inject Jasypt secret into application-common.yml
-        run: echo ${{ secrets.JASYPT_SECRET }} >> ./src/main/resources/application-common.yml
+        run: echo ${{secrets.JASYPT}} >> ./src/main/resources/application-common.yml
       - name: View application-common.yml
         run: cat ./src/main/resources/application-common.yml
 
