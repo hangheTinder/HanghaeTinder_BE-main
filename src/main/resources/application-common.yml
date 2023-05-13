@@ -10,6 +10,11 @@ spring:
         hbm2ddl:
           auto: update
     open-in-view: false
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .ftl
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -18,6 +23,13 @@ spring:
     multipart:
         max-file-size: 10MB
         max-request-size: 10MB
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
 
 springdoc:
   swagger-ui:
