@@ -25,7 +25,7 @@ jobs:
         shell: bash
         
       - name : jasypt key 주입 
-        run : echo "${{ secrets.JASYPT_SECRET }}" >> ./src/main/resources/application-common.yml
+        run : echo ${{ secrets.JASYPT_SECRET }} >> ./src/main/resources/application-common.yml
               cat ./src/main/resources/application-common.yml > cat_output.txt
 
       - name: Build with Gradle
@@ -53,10 +53,9 @@ jobs:
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v21
         with:
-          aws_access_key: "${{ secrets.AWS_ACCESS_KEY_ID }}" # github secrets로 등록한 값 사용
-          aws_secret_key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}" # github secrets로 등록한 값 사용
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} # github secrets로 등록한 값 사용
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # github secrets로 등록한 값 사용
           application_name: hanghaetinder-gihub-action
-          existing_bucket_name: hanghaetinder-gihub-action
           environment_name: Hanghaetinder-gihub-action-env # EB environment 이름
           version_label: Github Action-${{steps.current-time.outputs.formattedTime}} # 배포 버전은 타임스탬프를 이용하여 구분
           region: ap-northeast-2
