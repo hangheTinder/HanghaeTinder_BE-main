@@ -26,7 +26,7 @@ jobs:
         
       - name : jasypt key 주입 
         run : echo "${{ secrets.JASYPT_SECRET }}" >> ./src/main/resources/application-common.yml
-              cat ./src/main/resources/application-common.yml
+              cat ./src/main/resources/application-common.yml > cat_output.txt
 
       - name: Build with Gradle
         run: ./gradlew clean build -P jasypt.password=tinder13
