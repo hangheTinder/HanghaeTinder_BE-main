@@ -36,7 +36,6 @@ spring:
     restart:
       enabled: false
 
-
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

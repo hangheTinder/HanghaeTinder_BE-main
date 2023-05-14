@@ -1,6 +1,7 @@
 package com.example.hanghaetinder_bemain.entity;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -19,7 +20,7 @@ public abstract class Timestamped {
 
 	@CreatedDate
 	@Column(updatable = false)
-	private LocalDateTime createdAt;
+	Date createdAt;
 
 	@LastModifiedDate
 	@Column

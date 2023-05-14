@@ -26,14 +26,15 @@ public class ChatRoomListDto {
 	public static class ChatRoomDto {
 		private Long id;
 		private String name;
-		private String matchMember;
+		private String roomId;
 	}
 	public static ChatRoomListDto from(List<ChatRoom> chatRooms) {
 		List<ChatRoomDto> chatRoomDtos = chatRooms.stream()
 			.map(chatRoom -> new ChatRoomListDto.ChatRoomDto(
 				chatRoom.getId(),
 				chatRoom.getName(),
-				chatRoom.getRoomId())).collect(Collectors.toList());
+				chatRoom.getRoomId()))
+			.collect(Collectors.toList());
 
 		return new ChatRoomListDto(chatRoomDtos);
 	}
