@@ -48,10 +48,5 @@ public class ChatRoomController {
         return "/chat/roomdetail";
     }
 
-    @GetMapping("/room/{roomId}")
-    @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
-    }
 }
 

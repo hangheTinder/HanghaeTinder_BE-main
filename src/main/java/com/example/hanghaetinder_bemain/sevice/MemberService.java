@@ -18,7 +18,6 @@ import com.example.hanghaetinder_bemain.entity.Member;
 import com.example.hanghaetinder_bemain.repository.DislikeMemberRepository;
 import com.example.hanghaetinder_bemain.repository.LikeMemberRepository;
 import com.example.hanghaetinder_bemain.repository.MemberRepository;
-import com.example.hanghaetinder_bemain.security.auth.UserDetailsImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +34,7 @@ public class MemberService {
 	 *내가 좋아요 or 싫어요 를 눌렀거나
 	 * 나에게 좋아요 or 싫어요 를 누른사람을 제외한다.
 	 */
-	@Transactional(readOnly = true)
+	/*@Transactional(readOnly = true)
 	public List<MemberResponseDto> users(UserDetailsImpl userDetails) {
 		//1.사용자 아이디를꺼낸다
 		Long userId = userDetails.getId();
@@ -192,7 +191,7 @@ public class MemberService {
 			likeUserIds.add(like.getLikedMember().getId());
 		}
 		return likeUserIds;
-	}
+	}*/
 
 
 }

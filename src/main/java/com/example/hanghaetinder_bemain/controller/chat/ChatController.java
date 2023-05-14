@@ -21,6 +21,7 @@ import com.example.hanghaetinder_bemain.repository.ChatMessageRepository;
 import com.example.hanghaetinder_bemain.repository.ChatRoomRepository;
 import com.example.hanghaetinder_bemain.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.repository.MemberRepository;
+import com.example.hanghaetinder_bemain.sevice.chat.ChatMessageService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +31,7 @@ public class ChatController {
 
 	private final SimpMessageSendingOperations messagingTemplate;
 	private final ChatMessageRepository chatMessageRepository;
+	private final ChatMessageService chatMessageService;
 	private final ChatRoomRepository chatRoomRepository;
 	private final MatchMemberRepository matchMemberRepository;
 	private final MemberRepository memberRepository;
@@ -38,15 +40,15 @@ public class ChatController {
 	public void message(ChatMessage message) {
 		if (ChatMessage.MessageType.ENTER.equals(message.getType()))
 			message.setMessage(message.getSender() + "님이 입장하셨습니다.");
-		chatMessageRepository.save(message);
+		chatMessageService.save(message);
 
 		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
 	}
 
-	@GetMapping("/room/{roomId}/messages")
-	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable Long roomId) {
+	@GetMapping("/room/{Rid}/messages")
+	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable Long Rid) {
 
-		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(roomId);
+		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(Rid);
 		if (chatRoomOptional.isPresent()) {
 			List<ChatMessage> chatMessages = chatMessageRepository.findByRoomIdOrderByCreatedAtAsc(chatRoomOptional.get().getRoomId());
 			ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
@@ -55,7 +57,7 @@ public class ChatController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping("/room/{id}")
+	@GetMapping("/room/user/{id}")
 	public ResponseEntity<ChatRoomListDto> chatRooms(@PathVariable Long id) {
 
 		Optional<Member> member = memberRepository.findById(id);

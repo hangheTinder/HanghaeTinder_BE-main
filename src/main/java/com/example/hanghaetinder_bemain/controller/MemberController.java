@@ -2,7 +2,6 @@ package com.example.hanghaetinder_bemain.controller;
 
 import java.util.List;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.hanghaetinder_bemain.dto.resoponse.MemberResponseDto;
 import com.example.hanghaetinder_bemain.entity.ChatRoom;
 import com.example.hanghaetinder_bemain.repository.MemberRepository;
-import com.example.hanghaetinder_bemain.security.auth.UserDetailsImpl;
 import com.example.hanghaetinder_bemain.sevice.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class MemberController {
 
-	private final MemberService memberService;
+/*	private final MemberService memberService;
 	private final MemberRepository memberRepository;
 
 
@@ -53,7 +51,7 @@ public class MemberController {
 	public void dislikeUsers(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
 
 		memberService.dislikeToUsers(userId,userDetails);
-	}
+	}*/
 
 
 
