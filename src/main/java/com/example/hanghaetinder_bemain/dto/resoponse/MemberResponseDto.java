@@ -20,6 +20,7 @@ public class MemberResponseDto {
 	private String nickname;
 	private int age;
 	private Gender gender;
+
 	private List<String> favorites;
 	private String img;
 

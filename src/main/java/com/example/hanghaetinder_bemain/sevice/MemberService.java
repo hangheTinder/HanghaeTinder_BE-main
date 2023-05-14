@@ -36,6 +36,7 @@ import com.example.hanghaetinder_bemain.entity.DislikeMember;
 import com.example.hanghaetinder_bemain.entity.LikeMember;
 import com.example.hanghaetinder_bemain.repository.DislikeMemberRepository;
 import com.example.hanghaetinder_bemain.repository.LikeMemberRepository;
+import com.example.hanghaetinder_bemain.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

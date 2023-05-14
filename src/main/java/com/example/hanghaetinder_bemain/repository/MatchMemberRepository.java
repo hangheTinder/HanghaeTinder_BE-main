@@ -15,6 +15,6 @@ import com.example.hanghaetinder_bemain.entity.Member;
 public interface MatchMemberRepository extends JpaRepository<MatchMember, Long> {
 	MatchMember findByMemberAndMatchedMember(Member member, Member matchMember);
 
-	@Query("SELECT distinct MM From MatchMember MM Where MM.member.id = :id or  MM.matchedMember = :id")
+	@Query("SELECT distinct MM.id From MatchMember MM Where MM.member.id = :id or  MM.matchedMember = :id")
 	Optional<MatchMember> findMatchmember(@Param("id") Long id);
 }
