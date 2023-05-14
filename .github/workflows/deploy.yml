@@ -1,4 +1,4 @@
-name: tinderclone # 성공여부 테스트 Push
+name: tinderclone 
 
 on:
   push:
