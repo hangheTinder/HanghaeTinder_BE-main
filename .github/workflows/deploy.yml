@@ -1,0 +1,72 @@
+name: hanghaetinder-gihub-action
+
+on:
+  push:
+    branches: [ develop ] # develop에 push될 때 CD가 일어나도록 핸들링
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: Create application-common.yml
+        run: touch ./src/main/resources/application-common.yml
+      - name: Print Secret Value 
+        run : echo ${{secrets.JASYPT}} 
+      - name: Inject Jasypt secret into application-common.yml
+        run: echo ${{secrets.JASYPT}} | base64 --decode >> ./src/main/resources/application-common.yml
+      - name: View application-common.yml
+        run: cat ./src/main/resources/application-common.yml
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2 # 최신 버전을 쓰고 싶었으나 이슈가 생겨서 기존에 CI에서 쓰던 버전 사용
+        with:
+          java-version: 17
+          distribution: 'adopt' # or 'zulu'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+        
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
+        shell: bash
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Build Artifact
+          path: build
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss # 다른 포맷으로 변경 가능(MomentJS format syntax)
+          utcOffset: "+09:00" # 한국 시간에 맞추기 위함
+
+        # grandle build를 통해 만들어진 jar를 beanstalk에 배포하기 위한 zip 파일로 만드는 것
+      - name: Generate deployment package 
+        run: |
+          mkdir -p deploy
+          cp build/libs/HanghaeTinder_BE-main-0.0.1-SNAPSHOT.jar deploy/application.jar # 빌드 완료 시 jar 파일명을 application.jar로 변경
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .platform 포함하여 zip 생성
+
+        # Beanstalk Deploy 플러그인 사용
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} # github secrets로 등록한 값 사용
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # github secrets로 등록한 값 사용
+          application_name: hanghaetinder-gihub-action
+          environment_name: Hanghaetinder-gihub-action-env # EB environment 이름
+          version_label: Github Action-${{steps.current-time.outputs.formattedTime}} # 배포 버전은 타임스탬프를 이용하여 구분
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 180 # default wait time은 30초이며, 필자의 EB가 느려서 180초로 지정했습니다(지정 안하면 간혹 timeout 발생).
