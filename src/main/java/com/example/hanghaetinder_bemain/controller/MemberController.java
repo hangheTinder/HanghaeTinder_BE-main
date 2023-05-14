@@ -58,11 +58,11 @@ public class MemberController {
 		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
 	}
 
-	@GetMapping("user/logout")
-	public ResponseEntity logout(HttpServletRequest request) {
-		memberService.logout(request);
-		return ResponseEntity.ok(new DefaultRes(ResponseMessage.LOGOUT_SUCCESS));
-	}
+	// @GetMapping("user/logout")
+	// public ResponseEntity logout(HttpServletRequest request) {
+	// 	memberService.logout(request);
+	// 	return ResponseEntity.ok(new DefaultRes(ResponseMessage.LOGOUT_SUCCESS));
+	// }
 
 		@Operation(summary = "회원목록 전체조회", description = "회원조회 메서드입니다.")
 		@GetMapping("/users")
