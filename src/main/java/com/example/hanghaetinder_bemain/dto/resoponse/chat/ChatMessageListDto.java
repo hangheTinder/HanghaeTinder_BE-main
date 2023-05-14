@@ -28,8 +28,7 @@ public class ChatMessageListDto {
 		private ChatMessage.MessageType type;
 		private String sender;
 		private String message;
-		private Date createdAt;
-		private String lastMsg;
+		private String createdAt;
 	}
 
 	public static ChatMessageListDto from(List<ChatMessage> chatMessages) {
@@ -39,8 +38,7 @@ public class ChatMessageListDto {
 				chatMessage.getType(),
 				chatMessage.getSender(),
 				chatMessage.getMessage(),
-				chatMessage.getCreatedAt(),
-				chatMessage.getChatRoom().getMessages().get(0).toString()
+				chatMessage.getCreatedAt().toString()
 			))
 			.collect(Collectors.toList());
 
