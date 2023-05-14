@@ -9,7 +9,6 @@ import javax.persistence.Id;
 public class Favorite {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String favoriteName;
 

@@ -8,3 +8,5 @@ spring:
     password: ENC(7hGT8IN9EgjMgO2p39s6d0RNhw1POPbP)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
+

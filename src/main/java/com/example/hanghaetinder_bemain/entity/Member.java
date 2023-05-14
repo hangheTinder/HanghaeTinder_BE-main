@@ -17,12 +17,16 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.example.hanghaetinder_bemain.dto.request.SignupRequestDto;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Setter
 public class Member extends Timestamped {
 
 	@Id
@@ -50,8 +54,31 @@ public class Member extends Timestamped {
 	@Column(nullable = false)
 	private String img;
 
+
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "member_favorite",
+		joinColumns = @JoinColumn(name = "member_id"),
+		inverseJoinColumns = @JoinColumn(name = "favorite_id"))
+	private List<Favorite> favorites;
+
 	@OneToMany(mappedBy = "member")
-	private List<MemberFavorite> memberFavoriteList = new ArrayList<>();
+	private Set<LikeMember> likeMembers = new HashSet<>();
+
+	@OneToMany(mappedBy = "member")
+	private Set<DislikeMember> dislikeMember = new HashSet<>();
+
+	@OneToMany(mappedBy = "member")
+	private Set<MatchMember> matchMember = new HashSet<>();
+
+	public Member(SignupRequestDto signupRequestDto){
+		this.userId = signupRequestDto.getUserId();
+		this.nickname = signupRequestDto.getNickname();
+		this.birth = signupRequestDto.getBirth();
+		this.gender =signupRequestDto.getGender();
+	}
+
+
+
 
 
 }
