@@ -9,8 +9,3 @@ spring:
   h2:
     console:
       enabled: true
-cloud:
-  aws:
-    credentials:
-      accessKey: AKIASRKWXOKKICIKPQOJ
-      secretKey: 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

@@ -12,7 +12,6 @@ import lombok.Getter;
 public class Favorite {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String favoriteName;
 

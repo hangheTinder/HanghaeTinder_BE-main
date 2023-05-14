@@ -1,5 +1,5 @@
+
 spring:
-  include: secrets
   config:
     activate:
       on-profile: common
@@ -8,6 +8,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        use_sql_comments: true
         hbm2ddl:
           auto: update
     open-in-view: false
@@ -19,11 +20,15 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  redis:
+    host: localhost
+    port: 6379
 
   servlet:
     multipart:
         max-file-size: 10MB
         max-request-size: 10MB
+
 
   devtools:
     livereload:
@@ -50,9 +55,9 @@ springdoc:
   paths-to-match:
     - /**
 
-jwt:
   secret:
-    key: 7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
+    access-key: 7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
+    refresh-key:  7ZWt7ZW064Gd64KY6rOg64uk7J2067mZ7ZWY65+s7KCc7KO864+E6rCI6rmM
 
 cloud:
   aws:
@@ -63,3 +68,9 @@ cloud:
     credentials:
       accessKey: ENC(6ylNTH5zlFoYoCspfLNnsAe0uv3uRk8TcaSzxs3XzvE=)
       secretKey: ENC(TsawG6ngdwk5T9DjLdgm77cPwRM7/mpQvu1C+9KFro5YSTW76ebAwTwZOk9v01tTbLyI2Pakr2A=)
+
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: TRACE
+

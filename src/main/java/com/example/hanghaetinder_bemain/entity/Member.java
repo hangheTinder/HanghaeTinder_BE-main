@@ -1,7 +1,9 @@
 package com.example.hanghaetinder_bemain.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,6 +20,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.example.hanghaetinder_bemain.dto.request.SignupRequestDto;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +30,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Entity
+@Setter
 public class Member extends Timestamped {
 
 	@Id
@@ -49,18 +54,18 @@ public class Member extends Timestamped {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Gender gender;
+	private String gender;
 
 	@Column(nullable = true)
 	private String img;
+
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 		name = "member_favorite",
 		joinColumns = @JoinColumn(name = "member_id"),
-		inverseJoinColumns = @JoinColumn(name = "favorite_id")
-	)
-	private Set<Favorite> favorites = new HashSet<>();
+		inverseJoinColumns = @JoinColumn(name = "favorite_id"))
+	private List<Favorite> favorites;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
 	private Set<LikeMember> likeMembers = new HashSet<>();
@@ -71,11 +76,19 @@ public class Member extends Timestamped {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
 	private Set<MatchMember> matchMember = new HashSet<>();
 
+	public Member(SignupRequestDto signupRequestDto){
+		this.userId = signupRequestDto.getUserId();
+		this.nickname = signupRequestDto.getNickname();
+		this.birth = signupRequestDto.getBirth();
+		this.gender =signupRequestDto.getGender().getValue();
+	}
+
+
 	public Member(String userId, String password, String nickname, Gender gender) {
 		this.userId = userId;
 		this.password = password;
 		this.nickname = nickname;
-		this.gender = gender;
+		this.gender = gender.getValue();
 	}
 
 

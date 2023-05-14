@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.hanghaetinder_bemain.entity.Favorite;
+import com.example.hanghaetinder_bemain.entity.Gender;
 import com.example.hanghaetinder_bemain.entity.Member;
 
 import lombok.Getter;
@@ -18,7 +19,8 @@ public class MemberResponseDto {
 	private String userId;
 	private String nickname;
 	private int age;
-	private Enum gender;
+	private Gender gender;
+
 	private List<String> favorites;
 	private String img;
 
