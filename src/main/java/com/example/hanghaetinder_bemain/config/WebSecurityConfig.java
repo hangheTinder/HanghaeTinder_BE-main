@@ -37,7 +37,8 @@ public class WebSecurityConfig {
 		"/swagger-ui/**",
 		"/v3/api-docs/**",
 		"/swagger-resources/**",
-		"/api-docs"
+		"/api-docs",
+		"/chat/**"
 	};
 	private final JwtUtil jwtUtil;
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
