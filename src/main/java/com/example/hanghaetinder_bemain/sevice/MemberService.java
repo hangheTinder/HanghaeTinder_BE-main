@@ -54,7 +54,6 @@ public class MemberService {
 
 	private final FavoriteRepository favoriteRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final RedisService redisService;
 	private final S3Uploader s3Uploader;
 	private final DislikeMemberRepository dislikeMemberRepository;
 	private final LikeMemberRepository likeMemberRepository;
@@ -73,31 +72,26 @@ public class MemberService {
 			() -> new CustomException(ResponseMessage.NOT_FOUND_USER));// 예외처리 해주기
 
 		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw new CustomException(ResponseMessage.NOT_FOUND_USER);
+			throw new CustomException(ResponseMessage.NOT_Fail_USER);
 		}
 
 		String accessToken = jwtUtil.createAccessToken(member.getUserId());
-		String refreshToken = jwtUtil.createRefreshToken(member.getUserId());
-
-		String redisKey = refreshToken.substring(7);
-		redisService.setValues(redisKey, member.getUserId());
 
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
-		response.addHeader(JwtUtil.REFRESHTOKEN_HEADER, refreshToken);
 
 		return new LoginResponseDto(member.getNickname());
 	}
 
-	@Transactional(readOnly = true)
-	public void logout(HttpServletRequest request) {
-		String refreshToken = request.getHeader(JwtUtil.REFRESHTOKEN_HEADER).substring(7);
-
-		if (refreshToken != null && redisService.getValues(refreshToken) != null) {
-			redisService.deleteValues(refreshToken);
-		} else {
-			throw new CustomException(ResponseMessage.WRONG_ACCESS);
-		}
-	}
+	// @Transactional(readOnly = true)
+	// public void logout(HttpServletRequest request) {
+	// 	String accessToken = request.getHeader(JwtUtil.AUTHORIZATION_HEADER).substring(7);
+	//
+	// 	if (accessToken != null && redisService.getValues(accessToken) != null) {
+	// 		redisService.deleteValues(accessToken);
+	// 	} else {
+	// 		throw new CustomException(ResponseMessage.WRONG_ACCESS);
+	// 	}
+	// }
 
 	//회원가입
 	@Transactional

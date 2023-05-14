@@ -30,6 +30,7 @@ public class ChatMessageService {
 		redisTemplate.opsForList().rightPush(message.getRoomId().toString(), message);
 	}
 
+
 	@Scheduled(fixedRate  = 60000) // 1분마다 실행
 	public void saveMessagesToDb() {
 		// Redis에 저장된 메세지를 DB에 저장하는 작업 수행
