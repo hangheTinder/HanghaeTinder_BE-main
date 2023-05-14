@@ -39,14 +39,12 @@ public class ChatController {
 
 	@MessageMapping("/chat/message")
 	public void message(ChatMessage message) {
-		if (ChatMessage.MessageType.ENTER.equals(message.getType()))
-			message.setMessage(message.getSender() + "님이 입장하셨습니다.");
 		chatMessageService.save(message);
 
 		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
 	}
 
-	@GetMapping("/room/{Rid}/messages")
+	@GetMapping("/api/room/{Rid}/messages")
 	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable Long Rid) {
 
 		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(Rid);
@@ -58,7 +56,7 @@ public class ChatController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping("/room/user/{id}")
+	@GetMapping("/api/user/room/{id}")
 	public ResponseEntity<ChatRoomListDto> chatRooms(@PathVariable Long id) {
 
 		Optional<Member> member = memberRepository.findById(id);
@@ -70,5 +68,10 @@ public class ChatController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-
+	@GetMapping("/api/user/chat/{id}")
+	public String roomDetail(@PathVariable Long id) {
+		//websocket
+		String RoomId = chatRoomRepository.findRoomId(id).getRoomId();
+		return RoomId;
+	}
 }

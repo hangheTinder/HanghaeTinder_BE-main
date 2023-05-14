@@ -22,8 +22,13 @@ import io.lettuce.core.dynamic.annotation.Param;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     List<ChatRoom> findAll();
+
+    @Query("SELECT CR FROM ChatRoom CR WHERE CR.id = :id")
+    ChatRoom findRoomId(@Param("id") Long id);
+
+    Optional<ChatRoom> findById(Long id);
     @Query("SELECT CR FROM ChatRoom CR Where CR.id =:id order by CR.messages[0].createdAt desc")
     List<ChatRoom> findAllById(@Param("id") Long id);
-    ChatRoom findRoomByRoomId(String id);
+
 
 }
