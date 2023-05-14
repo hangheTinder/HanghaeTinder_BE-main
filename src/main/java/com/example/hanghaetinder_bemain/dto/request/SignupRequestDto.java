@@ -13,6 +13,8 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.hanghaetinder_bemain.entity.Gender;
+
 @Getter
 @Setter
 public class SignupRequestDto {
@@ -29,7 +31,7 @@ public class SignupRequestDto {
 	private LocalDate birth;
 
 	private List<String> favorites;
-	private String gender;
+	private Gender gender;
 	private MultipartFile image;
 
 
