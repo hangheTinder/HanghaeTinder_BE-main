@@ -42,7 +42,7 @@ public class MemberController {
 	private final MemberService memberService;
 
 	//회원가입
-	@PostMapping(value = "/signup" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "user/signup" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity signup(@ModelAttribute SignupRequestDto signUpRequestDto) {
 
 		memberService.signup(signUpRequestDto);
@@ -50,14 +50,13 @@ public class MemberController {
 		return ResponseEntity.ok(new DefaultRes(ResponseMessage.CREATED_USER));
 	}
 
-
-	@PostMapping("/login")
+	@PostMapping("user/login")
 	public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 		LoginResponseDto loginResponseDto = memberService.login(loginRequestDto, response);
 		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
 	}
 
-	@GetMapping("/logout")
+	@GetMapping("user/logout")
 	public ResponseEntity logout(HttpServletRequest request) {
 		memberService.logout(request);
 		return ResponseEntity.ok(new DefaultRes(ResponseMessage.LOGOUT_SUCCESS));

@@ -51,7 +51,7 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /**
-
+jwt:
   secret:
     access-key: 7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
     refresh-key:  7ZWt7ZW064Gd64KY6rOg64uk7J2067mZ7ZWY65+s7KCc7KO864+E6rCI6rmM

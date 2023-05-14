@@ -30,7 +30,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Entity
-@Setter
 public class Member extends Timestamped {
 
 	@Id
@@ -54,7 +53,7 @@ public class Member extends Timestamped {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private String gender;
+	private Gender gender;
 
 	@Column(nullable = true)
 	private String img;
@@ -80,7 +79,7 @@ public class Member extends Timestamped {
 		this.userId = signupRequestDto.getUserId();
 		this.nickname = signupRequestDto.getNickname();
 		this.birth = signupRequestDto.getBirth();
-		this.gender =signupRequestDto.getGender().getValue();
+		this.gender =signupRequestDto.getGender();
 	}
 
 
@@ -88,7 +87,7 @@ public class Member extends Timestamped {
 		this.userId = userId;
 		this.password = password;
 		this.nickname = nickname;
-		this.gender = gender.getValue();
+		this.gender = gender;
 	}
 
 

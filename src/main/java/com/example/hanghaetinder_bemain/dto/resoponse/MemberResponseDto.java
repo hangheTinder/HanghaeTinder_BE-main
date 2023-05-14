@@ -28,7 +28,14 @@ public class MemberResponseDto {
 		this.userId = member.getUserId();
 		this.nickname = member.getNickname();
 		this.age = member.getAge();
-		this.gender = member.getGender();
+		if(member.getGender().equals(Gender.FEMALE))
+		{
+			this.gender = Gender.FEMALE;
+		}
+		else{
+			this.gender = Gender.MALE;
+		}
+
 		List<String> favoriteNames = new ArrayList<>();
 		for (Favorite favorite : member.getFavorites()) {
 			favoriteNames.add(favorite.getFavoriteName());

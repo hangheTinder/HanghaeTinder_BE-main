@@ -31,7 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class WebSecurityConfig {
 
 	private static final String[] AUTH_WHITELIST = {
-		"/api/member/**",
+		"/api/user/**",
 		"/member/authenticate",
 		"/swagger-ui.html",
 		"/swagger-ui/**",
@@ -47,7 +47,7 @@ public class WebSecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		// h2-console 사용 및 resources 접근 허용 설정
 		return (web) -> web.ignoring()
-			                .requestMatchers(PathRequest.toH2Console())
+			.requestMatchers(PathRequest.toH2Console())
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
 

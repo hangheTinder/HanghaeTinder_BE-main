@@ -8,15 +8,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import lombok.Getter;
+
+@Getter
 public class UserDetailsImpl implements UserDetails {
 
 	private final Member member; // 인증 완료된 User 객체
 	private final String userId; // 인증 완료된 User 의 ID
+	private final Long Id;
 	private final String password; // 인증 완료된 User 의 pw
 
-	public UserDetailsImpl(Member member, String userId, String password) {
+
+	public UserDetailsImpl(Member member, String userId, Long id, String password) {
 		this.member = member;
 		this.userId = userId;
+		Id = id;
 		this.password = password;
 	}
 
