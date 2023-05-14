@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class MemberController {
 
-/*	private final MemberService memberService;
+	private final MemberService memberService;
 	private final MemberRepository memberRepository;
 
 
@@ -51,7 +51,7 @@ public class MemberController {
 	public void dislikeUsers(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
 
 		memberService.dislikeToUsers(userId,userDetails);
-	}*/
+	}
 
 
 
