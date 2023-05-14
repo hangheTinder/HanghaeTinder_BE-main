@@ -36,12 +36,6 @@ public class ChatRoomController {
         return chatRoomRepository.findAll();
     }
 
- /*   @PostMapping("/room")
-    @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomService.createChatRoom(name);
-    }*/
-
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable String roomId) {
         model.addAttribute("roomId", roomId);

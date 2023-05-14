@@ -3,6 +3,7 @@ package com.example.hanghaetinder_bemain.security;
 
 import com.example.hanghaetinder_bemain.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -36,7 +37,13 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return new ArrayList<>();
+
+		String authority = "USER";
+		SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(simpleGrantedAuthority);
+
+		return authorities;
 	}
 
 	@Override

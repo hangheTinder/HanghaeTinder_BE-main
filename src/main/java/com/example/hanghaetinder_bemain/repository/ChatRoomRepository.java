@@ -27,7 +27,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     ChatRoom findRoomId(@Param("id") Long id);
 
     Optional<ChatRoom> findById(Long id);
-    @Query("SELECT CR FROM ChatRoom CR Where CR.id =:id order by CR.messages[0].createdAt desc")
+    @Query("SELECT cr FROM ChatRoom cr JOIN cr.messages m WHERE cr.id = :id ORDER BY m.createdAt DESC")
     List<ChatRoom> findAllById(@Param("id") Long id);
 
 

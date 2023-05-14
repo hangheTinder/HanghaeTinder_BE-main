@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.catalina.User;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +67,7 @@ public class MemberController {
 
 		@Operation(summary = "회원목록 전체조회", description = "회원조회 메서드입니다.")
 		@GetMapping("/users")
-		public List<MemberResponseDto> users (@AuthenticationPrincipal UserDetailsImpl userDetails){
+		public List<MemberResponseDto> users (@AuthenticationPrincipal final UserDetailsImpl userDetails){
 
 			return memberService.users(userDetails);
 		}
