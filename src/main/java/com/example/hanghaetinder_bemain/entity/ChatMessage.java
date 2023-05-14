@@ -5,9 +5,13 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +25,9 @@ public class ChatMessage extends Timestamped implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private ChatRoom chatRoom;
 
     // 메시지 타입 : 입장, 채팅
     public enum MessageType {

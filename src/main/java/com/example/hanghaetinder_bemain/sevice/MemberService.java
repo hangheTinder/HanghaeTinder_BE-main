@@ -18,10 +18,13 @@ import com.example.hanghaetinder_bemain.dto.request.LoginRequestDto;
 import com.example.hanghaetinder_bemain.dto.request.SignupRequestDto;
 import com.example.hanghaetinder_bemain.dto.resoponse.LoginResponseDto;
 import com.example.hanghaetinder_bemain.entity.Favorite;
+import com.example.hanghaetinder_bemain.entity.MatchMember;
 import com.example.hanghaetinder_bemain.entity.Member;
 import com.example.hanghaetinder_bemain.exception.CustomException;
 import com.example.hanghaetinder_bemain.jwt.JwtUtil;
+import com.example.hanghaetinder_bemain.repository.ChatRoomRepository;
 import com.example.hanghaetinder_bemain.repository.FavoriteRepository;
+import com.example.hanghaetinder_bemain.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.repository.MemberRepository;
 import com.example.hanghaetinder_bemain.security.UserDetailsImpl;
 import com.example.hanghaetinder_bemain.util.AgeCalculator;
@@ -53,11 +56,11 @@ public class MemberService {
 	private final PasswordEncoder passwordEncoder;
 	private final RedisService redisService;
 	private final S3Uploader s3Uploader;
-	private final AmazonS3Client amazonS3Client;
-
 	private final DislikeMemberRepository dislikeMemberRepository;
-
 	private final LikeMemberRepository likeMemberRepository;
+	private final MatchMemberRepository matchMemberRepository;
+	private final ChatRoomRepository chatRoomRepository;
+
 
 
 
@@ -182,7 +185,32 @@ public class MemberService {
 		likeMember.setMember(member);
 		likeMember.setLikedMember(memberToLike);
 		likeMemberRepository.save(likeMember);
+
+		boolean isLikedByMe = isLikedByMe(memberToLike, member);
+		if (isLikedByMe) {
+			String roomName = member.getNickname() + "님과 " + memberToLike.getNickname()+"의 채팅방 ";
+			ChatRoom chatRoom = ChatRoom.create(roomName);
+			MatchMember match = new MatchMember(member, memberToLike, chatRoom);
+			matchMemberRepository.save(match);
+			chatRoomRepository.save(chatRoom);
+		}
 	}
+	@Transactional
+	public boolean isLikedByMe(Member member, Member likedMember) {
+
+		// 현재 사용자가 좋아요를 누른 사용자의 목록을 가져옵니다.
+		List<LikeMember> likesByMe = likeMemberRepository.findAllByMember(member);
+
+		// 가져온 목록에서 나를 좋아요 누른 사용자가 있는지 확인합니다.
+		for (LikeMember likeMember : likesByMe) {
+			if (likeMember.getLikedMember().getId().equals(likedMember.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	//싫어요 를 눌렀을때
 	@Transactional
 	public void dislikeToUsers(Long userIdToDislike, UserDetailsImpl userDetails) {
