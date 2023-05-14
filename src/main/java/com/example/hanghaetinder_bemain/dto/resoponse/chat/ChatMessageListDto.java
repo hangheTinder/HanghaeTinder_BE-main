@@ -1,5 +1,6 @@
 package com.example.hanghaetinder_bemain.dto.resoponse.chat;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,8 @@ public class ChatMessageListDto {
 		private ChatMessage.MessageType type;
 		private String sender;
 		private String message;
-		private String createdAt;
+		private Date createdAt;
+		private String lastMsg;
 	}
 
 	public static ChatMessageListDto from(List<ChatMessage> chatMessages) {
@@ -37,7 +39,8 @@ public class ChatMessageListDto {
 				chatMessage.getType(),
 				chatMessage.getSender(),
 				chatMessage.getMessage(),
-				chatMessage.getCreatedAt().toString()
+				chatMessage.getCreatedAt(),
+				chatMessage.getChatRoom().getMessages().get(0).toString()
 			))
 			.collect(Collectors.toList());
 
