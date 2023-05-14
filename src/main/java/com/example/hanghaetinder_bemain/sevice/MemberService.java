@@ -18,7 +18,6 @@ import com.example.hanghaetinder_bemain.entity.Member;
 import com.example.hanghaetinder_bemain.repository.DislikeMemberRepository;
 import com.example.hanghaetinder_bemain.repository.LikeMemberRepository;
 import com.example.hanghaetinder_bemain.repository.MemberRepository;
-import com.example.hanghaetinder_bemain.security.auth.UserDetailsImpl;
 
 import lombok.RequiredArgsConstructor;
 

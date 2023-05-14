@@ -18,7 +18,7 @@ public class MemberResponseDto {
 	private String userId;
 	private String nickname;
 	private int age;
-	private String gender;
+	private Enum gender;
 	private List<String> favorites;
 	private String img;
 
