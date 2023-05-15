@@ -1,5 +1,5 @@
+
 spring:
-  include: secrets
   config:
     activate:
       on-profile: common
@@ -8,36 +8,39 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        use_sql_comments: true
         hbm2ddl:
           auto: update
     open-in-view: false
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .ftl
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  redis:
+    host: localhost
+    port: 6379
 
   servlet:
     multipart:
         max-file-size: 10MB
         max-request-size: 10MB
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    groups-order: DESC
-    operationsSorter: method
-    disable-swagger-default-url: true
-    display-request-duration: true
-  api-docs:
-    path: /api-docs
-  show-actuator: true
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  paths-to-match:
-    - /**
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
 
 jwt:
   secret:
-    key: 7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
+    access-key: 7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
+    refresh-key:  7ZWt7ZW064Gd64KY6rOg64uk7J2067mZ7ZWY65+s7KCc7KO864+E6rCI6rmM
 
 cloud:
   aws:
@@ -46,5 +49,11 @@ cloud:
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: ENC(1VyT4LAZAXdxO6mlTb+YnPG3qF1eV+pLDGQrQob2y2M=)
-      secretKey: ENC(x0OaCwvmnt0piS9U4XqlqrVydMQGyHWQpXgAWAuhaT8hTK9ZZJw48+D9eeClNgrS/qw4EsF4ceg=)
+      accessKey: ENC(6ylNTH5zlFoYoCspfLNnsAe0uv3uRk8TcaSzxs3XzvE=)
+      secretKey: ENC(TsawG6ngdwk5T9DjLdgm77cPwRM7/mpQvu1C+9KFro5YSTW76ebAwTwZOk9v01tTbLyI2Pakr2A=)
+
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: TRACE
+
