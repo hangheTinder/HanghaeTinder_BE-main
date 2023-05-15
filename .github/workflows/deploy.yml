@@ -11,7 +11,6 @@ env:
   AWS_S3_BUCKET: hanghaetinders3
   AWS_CODE_DEPLOY_APPLICATION: hanghaetinder
   AWS_CODE_DEPLOY_GROUP: hanghaetinder-group
-  AWS_PROFILE: dev
 
 jobs:
   build-with-gradle:
