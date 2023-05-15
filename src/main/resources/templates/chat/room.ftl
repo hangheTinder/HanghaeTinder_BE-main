@@ -30,7 +30,7 @@
         </div>
         <ul class="list-group">
             <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId)">
-                {{item.name}}
+                {{item.chatrooms}}
             </li>
         </ul>
     </div>
@@ -40,6 +40,14 @@
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.min.js"></script>
     <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
     <script>
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+
+        }
+
         var vm = new Vue({
             el: '#app',
             data: {
@@ -52,7 +60,10 @@
             },
             methods: {
                 findAllRoom: function() {
-                    axios.get('/chat/rooms').then(response => { this.chatrooms = response.data; });
+                    axios.get('/chat/rooms', { headers: { Authorization: `${getCookie('Authorization')}` } }).then(response => {
+                        this.chatrooms= response.data;
+                        console.log(response.data);
+                    });
                 },
                 createRoom: function() {
                     if("" === this.room_name) {

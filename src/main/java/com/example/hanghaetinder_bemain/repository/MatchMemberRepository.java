@@ -1,5 +1,6 @@
 package com.example.hanghaetinder_bemain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,6 @@ import com.example.hanghaetinder_bemain.entity.Member;
 public interface MatchMemberRepository extends JpaRepository<MatchMember, Long> {
 	MatchMember findByMemberAndMatchedMember(Member member, Member matchMember);
 
-	@Query("SELECT distinct MM.id From MatchMember MM Where MM.member.id = :id or  MM.matchedMember = :id")
-	Optional<MatchMember> findMatchmember(@Param("id") Long id);
+	@Query("SELECT MM.chatRoom FROM MatchMember MM LEFT join MM.chatRoom.messages m WHERE MM.member.id = :id OR MM.matchedMember = :id GROUP BY MM.chatRoom ORDER BY m.createdAt DESC")
+	List<ChatRoom> findMatchmember(@Param("id") Long id);
 }

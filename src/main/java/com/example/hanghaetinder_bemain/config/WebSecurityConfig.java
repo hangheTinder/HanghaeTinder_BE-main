@@ -38,7 +38,6 @@ public class WebSecurityConfig {
 		"/v3/api-docs/**",
 		"/swagger-resources/**",
 		"/api-docs",
-		"/chat/**"
 	};
 	private final JwtUtil jwtUtil;
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -66,15 +65,19 @@ public class WebSecurityConfig {
 				.shouldFilterAllDispatcherTypes(false)
 				.antMatchers(AUTH_WHITELIST)
 				.permitAll()
+				.antMatchers("/chat/**").permitAll()
 				.anyRequest()
 				.authenticated()) // 그외의 요청들은 모두 인가 받아야 한다.
 			// JWT 인증/인가를 사용하기 위한 설정
 			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 		// 401 에러 핸들링
-		http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
+		//http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
 
-		http.formLogin().failureHandler(customAuthenticationFailureHandler);
+		//SockJS를 위해
+		http.headers().frameOptions().sameOrigin();
+		http.formLogin().loginPage("/api/user/login-page").permitAll();
+		//http.formLogin().failureHandler(customAuthenticationFailureHandler).permitAll();
 
 		return http.build();
 	}

@@ -2,6 +2,7 @@ package com.example.hanghaetinder_bemain.sevice;
 
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +18,13 @@ import com.example.hanghaetinder_bemain.dto.http.ResponseMessage;
 import com.example.hanghaetinder_bemain.dto.request.LoginRequestDto;
 import com.example.hanghaetinder_bemain.dto.request.SignupRequestDto;
 import com.example.hanghaetinder_bemain.dto.resoponse.LoginResponseDto;
+import com.example.hanghaetinder_bemain.entity.ChatMessage;
 import com.example.hanghaetinder_bemain.entity.Favorite;
 import com.example.hanghaetinder_bemain.entity.MatchMember;
 import com.example.hanghaetinder_bemain.entity.Member;
 import com.example.hanghaetinder_bemain.exception.CustomException;
 import com.example.hanghaetinder_bemain.jwt.JwtUtil;
+import com.example.hanghaetinder_bemain.repository.ChatMessageRepository;
 import com.example.hanghaetinder_bemain.repository.ChatRoomRepository;
 import com.example.hanghaetinder_bemain.repository.FavoriteRepository;
 import com.example.hanghaetinder_bemain.repository.MatchMemberRepository;
@@ -41,6 +44,7 @@ import com.example.hanghaetinder_bemain.repository.DislikeMemberRepository;
 import com.example.hanghaetinder_bemain.repository.LikeMemberRepository;
 import com.example.hanghaetinder_bemain.repository.MemberRepository;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,6 +63,7 @@ public class MemberService {
 	private final LikeMemberRepository likeMemberRepository;
 	private final MatchMemberRepository matchMemberRepository;
 	private final ChatRoomRepository chatRoomRepository;
+	private final ChatMessageRepository chatMessageRepository;
 
 
 
@@ -185,6 +190,9 @@ public class MemberService {
 			String roomName = member.getNickname() + "님과 " + memberToLike.getNickname()+"의 채팅방 ";
 			ChatRoom chatRoom = ChatRoom.create(roomName);
 			MatchMember match = new MatchMember(member, memberToLike, chatRoom);
+			ChatMessage chatMessage = new ChatMessage(ChatMessage.MessageType.ENTER, chatRoom.getRoomId(), "알림", "채팅방이 생성되었습니다.",
+				new Date(), chatRoom);
+			chatMessageRepository.save(chatMessage);
 			matchMemberRepository.save(match);
 			chatRoomRepository.save(chatRoom);
 		}

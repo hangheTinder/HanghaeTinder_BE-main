@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.hanghaetinder_bemain.dto.http.DefaultDataRes;
 import com.example.hanghaetinder_bemain.dto.http.DefaultRes;
@@ -59,6 +60,11 @@ public class MemberController {
 		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
 	}
 
+	@GetMapping("/user/login-page")
+	public ModelAndView loginPage() {
+		return new ModelAndView("/chat/login.html");
+	}
+
 	// @GetMapping("user/logout")
 	// public ResponseEntity logout(HttpServletRequest request) {
 	// 	memberService.logout(request);
@@ -72,13 +78,13 @@ public class MemberController {
 			return memberService.users(userDetails);
 		}
 
-		@Operation(summary = "채팅방 목록 조회", description = "채팅방 목록가기 클릭시 실행 메서드입니다.")
+	/*	@Operation(summary = "채팅방 목록 조회", description = "채팅방 목록가기 클릭시 실행 메서드입니다.")
 		@GetMapping("/users/match")
 		public List<ChatRoom> getChatRooms (@AuthenticationPrincipal UserDetailsImpl userDetails){
 			List<MemberResponseDto> matchedUsers = memberService.matched(userDetails);
 			return memberService.getChatRooms(matchedUsers, userDetails);
 		}
-
+*/
 		@Operation(summary = "좋아요 누를시 업데이트", description = "사용자가 좋아요를 눌렀을때 실행되는 메서드입니다.")
 		@PostMapping("/users/like/{userId}")
 		public void likeUsers (@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){

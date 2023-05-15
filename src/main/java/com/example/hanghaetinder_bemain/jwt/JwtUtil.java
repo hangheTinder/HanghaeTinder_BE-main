@@ -61,7 +61,7 @@ public class JwtUtil {
 
 		return Jwts.builder()
 			.setSubject(userId) // 정보 저장
-			.claim(AUTHORIZATION_HEADER, role)
+			.claim(AUTHORIZATION_KEY, role)
 			.setIssuedAt(date) // 토큰 발행 시간 정보
 			.setExpiration(new Date(date.getTime() + tokenValid)) // set Expire Time
 			.signWith(key, signatureAlgorithm)  // 사용할 암호화 알고리즘과

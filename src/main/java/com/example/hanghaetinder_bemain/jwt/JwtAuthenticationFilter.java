@@ -1,5 +1,6 @@
 package com.example.hanghaetinder_bemain.jwt;
 import com.example.hanghaetinder_bemain.dto.http.DefaultRes;
+import com.example.hanghaetinder_bemain.security.UserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
