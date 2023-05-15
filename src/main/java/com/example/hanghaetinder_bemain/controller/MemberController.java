@@ -71,31 +71,13 @@ public class MemberController {
 	// }
 
 
-		@Operation(summary = "회원목록 전체조회", description = "회원조회 메서드입니다.")
-		@GetMapping("/users")
-		public List<MemberResponseDto> users (@AuthenticationPrincipal final UserDetailsImpl userDetails){
+	@Operation(summary = "회원목록 전체조회", description = "회원조회 메서드입니다.")
+	@GetMapping("/users")
+	public List<MemberResponseDto> users (@AuthenticationPrincipal final UserDetailsImpl userDetails){
 
-			return memberService.users(userDetails);
-		}
+		return memberService.users(userDetails);
+	}
 
-	/*	@Operation(summary = "채팅방 목록 조회", description = "채팅방 목록가기 클릭시 실행 메서드입니다.")
-		@GetMapping("/users/match")
-		public List<ChatRoom> getChatRooms (@AuthenticationPrincipal UserDetailsImpl userDetails){
-			List<MemberResponseDto> matchedUsers = memberService.matched(userDetails);
-			return memberService.getChatRooms(matchedUsers, userDetails);
-		}
-*/
-		@Operation(summary = "좋아요 누를시 업데이트", description = "사용자가 좋아요를 눌렀을때 실행되는 메서드입니다.")
-		@PostMapping("/users/like/{userId}")
-		public void likeUsers (@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-
-
-	// @Operation(summary = "채팅방 목록 조회", description = "채팅방 목록가기 클릭시 실행 메서드입니다.")
-	// @GetMapping("/users/match")
-	// public List<ChatRoom> getChatRooms (@AuthenticationPrincipal UserDetailsImpl userDetails){
-	// 	List<MemberResponseDto> matchedUsers = memberService.matched(userDetails);
-	// 	return memberService.getChatRooms(matchedUsers, userDetails);
-	// }
 	@Operation(summary = "좋아요 누를시 업데이트", description = "사용자가 좋아요를 눌렀을때 실행되는 메서드입니다.")
 	@PostMapping("/users/like/{userId}")
 	public void likeUsers (@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response){
