@@ -47,7 +47,6 @@ public class WebSecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		// h2-console 사용 및 resources 접근 허용 설정
 		return (web) -> web.ignoring()
-			.requestMatchers(PathRequest.toH2Console())
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
 
@@ -72,12 +71,11 @@ public class WebSecurityConfig {
 			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 		// 401 에러 핸들링
-		//http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
+		http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
 
 		//SockJS를 위해
 		http.headers().frameOptions().sameOrigin();
-		http.formLogin().loginPage("/api/user/login-page").permitAll();
-		//http.formLogin().failureHandler(customAuthenticationFailureHandler).permitAll();
+		http.formLogin().failureHandler(customAuthenticationFailureHandler).permitAll();
 
 		return http.build();
 	}
