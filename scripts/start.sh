@@ -20,7 +20,7 @@ for SERVICE_PID in $SERVICE_PIDS; do
 done
 
 echo "[$NOW] $JAR 파일을 복사합니다." >> $START_LOG
-cp $ROOT_PATH/build/libs/*.jar $JAR
+cp $ROOT_PATH/build/libs/HanghaeTinder_BE-main-0.0.1-SNAPSHOT.jar $JAR
 
 echo "[$NOW] $JAR 파일을 실행합니다." >> $START_LOG
 nohup java -jar $JAR > $APP_LOG 2> $ERROR_LOG &
