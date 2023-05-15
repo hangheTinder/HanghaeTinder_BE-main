@@ -83,6 +83,7 @@ public class MemberService {
 		String accessToken = jwtUtil.createAccessToken(member.getUserId());
 
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+		// System.out.println(accessToken);
 
 		return new LoginResponseDto(member.getNickname());
 	}
@@ -102,22 +103,29 @@ public class MemberService {
 	@Transactional
 	public void signup(SignupRequestDto signupRequestDto) {
 
-		if (signupRequestDto.getUserId() == null || signupRequestDto.getPassword() == null || signupRequestDto.getNickname() == null || signupRequestDto.getBirth() == null || signupRequestDto.getGender() == null || signupRequestDto.getImage() == null ) {
+		//1.들어온값에 널이 포함되어있는지확인
+		if (signupRequestDto.getUserId() == null ||
+			signupRequestDto.getPassword() == null ||
+			signupRequestDto.getNickname() == null ||
+			signupRequestDto.getBirth() == null ||
+			signupRequestDto.getGender() == null ||
+			signupRequestDto.getImage() == null ) {
 			throw new CustomException(ResponseMessage.WRONG_FORMAT);
 		}
-
+		//2. existsByUserId이미 존재하는지확인 존재한다면 true를반환해서 오류메시지반환
 		if (memberRepository.existsByUserId(signupRequestDto.getUserId())) {
 			throw new CustomException(ResponseMessage.ALREADY_ENROLLED_USER);
 		}
 
+		//3.signupRequestDto생성자로받는 member객체생성
 		Member member = new Member(signupRequestDto);
-
+		//4. password암호화
 		String password = passwordEncoder.encode(signupRequestDto.getPassword());
-
+		//5. 암호화한 비밀번호 세팅
 		member.setPassword(password);
-
+		//6.Favorite형태의 리스트생성해서 signupRequestDto에서 꺼내서 저장
 		List<Favorite> favorites = favoriteRepository.findAllByFavoriteNameIn(signupRequestDto.getFavorites());
-
+		//7. 저장
 		member.setFavorites(favorites);
 
 
@@ -253,6 +261,7 @@ public class MemberService {
 				() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 			result.add(new MemberResponseDto(matchedMember));
 		}
+		//6.랜덤으로섞는다
 		Collections.shuffle(result);
 		return result;
 
