@@ -44,6 +44,12 @@ public class WebSecurityConfig {
 	private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring()
+			.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+	}
+
+	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		// CSRF 설정
@@ -64,12 +70,11 @@ public class WebSecurityConfig {
 			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 		// 401 에러 핸들링
-		//http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
+		http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
 
 		//SockJS를 위해
 		http.headers().frameOptions().sameOrigin();
-		http.formLogin().loginPage("/api/user/login-page").permitAll();
-		//http.formLogin().failureHandler(customAuthenticationFailureHandler).permitAll();
+		http.formLogin().failureHandler(customAuthenticationFailureHandler).permitAll();
 
 		return http.build();
 	}
