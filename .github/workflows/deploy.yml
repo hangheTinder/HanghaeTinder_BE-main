@@ -4,14 +4,12 @@ on:
   push:
     branches:
       - develop
-      - 'develop/**'
-
 env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: hanghaetinders3
   AWS_CODE_DEPLOY_APPLICATION: hanghaetinder
   AWS_CODE_DEPLOY_GROUP: hanghaetinder-group
-
+  
 jobs:
   build-with-gradle:
     runs-on: ubuntu-20.04
@@ -36,6 +34,6 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     - name: S3에 업로드
-      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://hanghaetinders3/$GITHUB_SHA.zip
+      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip --source .
     - name: EC2에 배포
       run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=$GITHUB_SHA.zip,bundleType=zip
