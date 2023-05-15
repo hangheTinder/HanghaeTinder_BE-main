@@ -43,18 +43,5 @@ public class MatchController {
 		return chatRoom;
 	}
 
-	/*@PostMapping("/api/v2/matches")
-	public ChatRoomDto match1() {
-		Member member = new Member("user3", "password1", "user1@test.com", Gender.FEMALE);
-		Member matchedMember = new Member("user4", "password2", "user2@test.com", Gender.MALE);
-		memberRepository.save(member);
-		memberRepository.save(matchedMember);
-
-		MatchMember match = new MatchMember(member, matchedMember);
-		matchMemberRepository.save(match);
-
-
-		return chatRoomService.createChatRoom(member, matchedMember);
-	}*/
 
 }

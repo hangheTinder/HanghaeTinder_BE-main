@@ -5,6 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+import org.apache.catalina.User;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.hanghaetinder_bemain.dto.http.DefaultDataRes;
 import com.example.hanghaetinder_bemain.dto.http.DefaultRes;
@@ -55,19 +59,36 @@ public class MemberController {
 		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
 	}
 
+	@GetMapping("/user/login-page")
+	public ModelAndView loginPage() {
+		return new ModelAndView("/chat/login.html");
+	}
+
 	// @GetMapping("user/logout")
 	// public ResponseEntity logout(HttpServletRequest request) {
 	// 	memberService.logout(request);
 	// 	return ResponseEntity.ok(new DefaultRes(ResponseMessage.LOGOUT_SUCCESS));
 	// }
 
-	@Operation(summary = "회원목록 전체조회", description = "회원조회 메서드입니다.")
-	@GetMapping("/users")
-	public List<MemberResponseDto> users(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response){
 
-		response.setHeader("Status-Code", "200");
-		return memberService.users(userDetails);
-	}
+		@Operation(summary = "회원목록 전체조회", description = "회원조회 메서드입니다.")
+		@GetMapping("/users")
+		public List<MemberResponseDto> users (@AuthenticationPrincipal final UserDetailsImpl userDetails){
+
+			return memberService.users(userDetails);
+		}
+
+	/*	@Operation(summary = "채팅방 목록 조회", description = "채팅방 목록가기 클릭시 실행 메서드입니다.")
+		@GetMapping("/users/match")
+		public List<ChatRoom> getChatRooms (@AuthenticationPrincipal UserDetailsImpl userDetails){
+			List<MemberResponseDto> matchedUsers = memberService.matched(userDetails);
+			return memberService.getChatRooms(matchedUsers, userDetails);
+		}
+*/
+		@Operation(summary = "좋아요 누를시 업데이트", description = "사용자가 좋아요를 눌렀을때 실행되는 메서드입니다.")
+		@PostMapping("/users/like/{userId}")
+		public void likeUsers (@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+
 
 	// @Operation(summary = "채팅방 목록 조회", description = "채팅방 목록가기 클릭시 실행 메서드입니다.")
 	// @GetMapping("/users/match")

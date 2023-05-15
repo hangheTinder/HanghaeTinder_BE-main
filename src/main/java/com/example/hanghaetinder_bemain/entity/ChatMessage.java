@@ -14,11 +14,13 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@RequiredArgsConstructor
 public class ChatMessage extends Timestamped implements Serializable {
 
     @Id
@@ -37,7 +39,16 @@ public class ChatMessage extends Timestamped implements Serializable {
     private MessageType type; // 메시지 타입
     private String roomId; // 방번호
     private String sender; // 메시지 보낸사람
-    private String message; // 메시지
+    private String message; // 메// 시지
     private Date createdAt;
+
+    public ChatMessage(MessageType type, String roomId, String sender, String message, Date createdAt, ChatRoom chatRoom) {
+        this.type = type;
+        this.roomId = roomId;
+        this.sender = sender;
+        this.message = message;
+        this.createdAt = createdAt;
+        this.chatRoom = chatRoom;
+    }
 
 }

@@ -36,7 +36,6 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_KEY = "auth";
 	private static final String BEARER_PREFIX = "Bearer ";
 	private static final long TOKEN_TIME = 600000L; // 10분으로 설정 600000L
-	private Key key;
 
 	@Value("${jwt.secret.access-key}")
 	private String accessSecretKey;
@@ -58,9 +57,11 @@ public class JwtUtil {
 
 	public String createToken(String userId, Key key, long tokenValid) {
 		Date date = new Date();
+		String role = "USER";
 
 		return Jwts.builder()
 			.setSubject(userId) // 정보 저장
+			.claim(AUTHORIZATION_KEY, role)
 			.setIssuedAt(date) // 토큰 발행 시간 정보
 			.setExpiration(new Date(date.getTime() + tokenValid)) // set Expire Time
 			.signWith(key, signatureAlgorithm)  // 사용할 암호화 알고리즘과
@@ -78,7 +79,7 @@ public class JwtUtil {
 	// 토큰 검증
 	public boolean validateToken(String token) {
 		try {
-			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+			Jwts.parserBuilder().setSigningKey(accessKey).build().parseClaimsJws(token);
 			return true;
 		} catch (SecurityException | MalformedJwtException e) {
 			log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
@@ -100,7 +101,7 @@ public class JwtUtil {
 
 
 	public Claims getUserInfoFromToken(String token) {
-		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+		return Jwts.parserBuilder().setSigningKey(accessKey).build().parseClaimsJws(token).getBody();
 	}
 
 	public Authentication createAuthentication(String userId) {

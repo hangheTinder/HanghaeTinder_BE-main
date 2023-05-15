@@ -10,5 +10,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
 	Favorite findByFavoriteName(String favoritename);
 
+	boolean existsByFavoriteName(String name);
+
 	List<Favorite> findAllByFavoriteNameIn(List<String> favoritenames);
 }
