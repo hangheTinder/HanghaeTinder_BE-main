@@ -49,6 +49,7 @@ public class ViewService {
 			List<Long> favoriteList = memberFavoriteRepository.findByFavoriteList1(member.getId());
 			result.add(new MemberResponseDto(members, favoriteList));
 		}
+
 		Message message = createMessage(result);
 
 		return new ResponseEntity<>(message, HttpStatus.OK);
