@@ -43,11 +43,13 @@ public class ViewService {
 
 		Long userId = userDetails.getId();
 		Member member = findMemberById(userId);
-		List<Member> normalUsers = memberRepository.findMembersExcludingLikesAndDislikes(member.getId(), PageRequest.of(0, 1));
+		List<Member> normalUsers = memberRepository.findMembersExcludingLikesAndDislikes(member.getId(), PageRequest.of(0, 2));
+
 		List<MemberResponseDto> result = new ArrayList<>();
 		for (Member members : normalUsers) {
 			List<Long> favoriteList = memberFavoriteRepository.findByFavoriteList1(member.getId());
 			result.add(new MemberResponseDto(members, favoriteList));
+			System.out.println(members.getNickname());
 		}
 
 		Message message = createMessage(result);
@@ -64,7 +66,7 @@ public class ViewService {
 
 		Member member = findMemberById(userId);
 
-		List<Member> likeMemberToUser = likeMemberRepository.findAllByLikedMember(member.getId(), PageRequest.of(0, 1));
+		List<Member> likeMemberToUser = likeMemberRepository.findAllByLikedMember(member.getId(), PageRequest.of(0, 2));
 
 		List<MemberResponseDto> result = new ArrayList<>();
 		for (Member findMember : likeMemberToUser) {
@@ -89,7 +91,7 @@ public class ViewService {
 			return Message.setSuccess(StatusEnum.OK, "조회 결과 없음");
 		} else {
 			//Collections.shuffle(result);
-			return Message.setSuccess(StatusEnum.OK, "조회 성공", result.get(0));
+			return Message.setSuccess(StatusEnum.OK, "조회 성공", result);
 		}
 
 	}

@@ -1,7 +1,5 @@
 package com.example.hanghaetinder_bemain.domain.member.service;
 
-import static org.junit.Assert.*;
-
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
@@ -28,9 +26,8 @@ public class ViewServiceTest {
 
 	@org.junit.Test
 	public void likedUser() {
+
 		long startTime = System.currentTimeMillis();
-
-
 		long endTime = System.currentTimeMillis();
 		long executionTime = endTime - startTime;
 		System.out.println("likeedUser() 쿼리 실행 시간: " + executionTime + "ms");
