@@ -3,6 +3,9 @@ package com.example.hanghaetinder_bemain.domain.chat.dto.response;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
+
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +20,9 @@ import lombok.Setter;
 public class ChatMessageListDto {
 
 	private List<ChatMessageDto> chatMessages;
+	private long totalElements;
+	private int totalPages;
+
 
 	@Getter
 	@Setter
@@ -30,8 +36,8 @@ public class ChatMessageListDto {
 		private String createdAt;
 	}
 
-	public static ChatMessageListDto from(List<ChatMessage> chatMessages) {
-		List<ChatMessageDto> chatMessageDtos = chatMessages.stream()
+	public static ChatMessageListDto from(Page<ChatMessage> chatMessages) {
+		List<ChatMessageDto> chatMessageDtos = chatMessages.getContent().stream()
 			.map(chatMessage -> new ChatMessageDto(
 				chatMessage.getId(),
 				chatMessage.getType(),
@@ -41,6 +47,12 @@ public class ChatMessageListDto {
 			))
 			.collect(Collectors.toList());
 
-		return new ChatMessageListDto(chatMessageDtos);
+		ChatMessageListDto chatMessageListDto = new ChatMessageListDto();
+		chatMessageListDto.setChatMessages(chatMessageDtos);
+		chatMessageListDto.setTotalElements(chatMessages.getTotalElements());
+		chatMessageListDto.setTotalPages(chatMessages.getTotalPages());
+
+		return chatMessageListDto;
+
 	}
 }
