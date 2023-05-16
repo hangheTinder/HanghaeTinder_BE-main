@@ -35,7 +35,7 @@ public class ActiveService {
 	private final DislikeMemberRepository dislikeMemberRepository;
 	private final ChatRoomRepository chatRoomRepository;
 	@Transactional
-	public void likeToUsers(Long userIdToLike, UserDetailsImpl userDetails) {
+	public void likeToUsers(final Long userIdToLike, final UserDetailsImpl userDetails) {
 		//1. 사용자의 아이디를꺼낸다
 		Long userId = userDetails.getId();
 		//2. 좋아요를 눌려진 사용자를 찾는다
@@ -61,7 +61,7 @@ public class ActiveService {
 		}
 	}
 	@Transactional
-	public boolean isLikedByMe(Member member, Member likedMember) {
+	public boolean isLikedByMe(final Member member, final Member likedMember) {
 
 		// 현재 사용자가 좋아요를 누른 사용자의 목록을 가져옵니다.
 		List<Member> likesByMe = likeMemberRepository.findAllByMember(member.getId());
@@ -78,7 +78,7 @@ public class ActiveService {
 
 	//싫어요 를 눌렀을때
 	@Transactional
-	public void dislikeToUsers(Long userIdToDislike, UserDetailsImpl userDetails) {
+	public void dislikeToUsers(final Long userIdToDislike, final UserDetailsImpl userDetails) {
 		//1.사용자의 아이디를 꺼내온다.
 		Long userId = userDetails.getId();
 		//2. 싫어요를 누르는 사용자를 찾는다,
@@ -92,7 +92,7 @@ public class ActiveService {
 		dislikeMemberRepository.save(dislikeMember);
 	}
 
-	public Member findMemberById(Long id){
+	public Member findMemberById(final Long id){
 		return memberRepository.findById(id).orElseThrow(
 			() -> new IllegalArgumentException("사용자를 찾을수가 없습니다"));
 	}

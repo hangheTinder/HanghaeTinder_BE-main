@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hanghaetinder_bemain.domain.member.dto.resoponse.MemberResponseDto;
-import com.example.hanghaetinder_bemain.domain.member.entity.DislikeMember;
 import com.example.hanghaetinder_bemain.domain.member.entity.Member;
 import com.example.hanghaetinder_bemain.domain.member.repository.DislikeMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.LikeMemberRepository;
@@ -30,7 +29,7 @@ public class ViewService {
 	private final DislikeMemberRepository dislikeMemberRepository;
 
 	@Transactional(readOnly = true)
-	public List<MemberResponseDto> users(UserDetailsImpl userDetails) {
+	public List<MemberResponseDto> users(final UserDetailsImpl userDetails) {
 		//1.사용자 아이디를꺼낸다
 		Long userId = userDetails.getId();
 		//2.사용자를 멤버객체에넣고
@@ -48,7 +47,7 @@ public class ViewService {
 
 	//사용자를 좋아요누른사람 목록
 	@Transactional(readOnly = true)
-	public List<MemberResponseDto> likedUser(UserDetailsImpl userDetails){
+	public List<MemberResponseDto> likedUser(final UserDetailsImpl userDetails){
 		//1.사용자 아이디를꺼낸다
 		Long userId = userDetails.getId();
 
