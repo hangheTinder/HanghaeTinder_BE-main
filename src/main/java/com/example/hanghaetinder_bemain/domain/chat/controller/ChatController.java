@@ -10,6 +10,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,7 +48,6 @@ public class ChatController {
 	private final ChatRoomRepository chatRoomRepository;
 	private final MatchMemberRepository matchMemberRepository;
 	private final MemberRepository memberRepository;
-	private final MemberService memberService;
 
 	@MessageMapping("/chat/message")
 	public void message(ChatMessage message) {
@@ -57,6 +57,7 @@ public class ChatController {
 		System.out.println("******메세지는"+message);
 		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
 	}
+
 
 	@GetMapping("/api/room/{Rid}/messages")
 	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable String Rid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {

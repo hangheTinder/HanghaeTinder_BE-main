@@ -29,7 +29,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
-
 	private static final String[] AUTH_WHITELIST = {
 		"/api/user/**",
 		"/member/authenticate",
@@ -39,6 +38,7 @@ public class WebSecurityConfig {
 		"/swagger-resources/**",
 		"/api-docs",
 		"/api/room/**",
+		"/ws-stomp/**",
 	};
 	private final JwtUtil jwtUtil;
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -86,6 +86,7 @@ public class WebSecurityConfig {
 		CorsConfiguration config = new CorsConfiguration();
 
 		config.addAllowedOrigin("http://localhost:3000");
+		config.addAllowedOrigin("http://localhost:8080");
 		config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
 		config.addAllowedMethod("*");
 		config.addAllowedHeader("*");
@@ -97,7 +98,6 @@ public class WebSecurityConfig {
 
 		return source;
 	}
-
 
 	// 비밀번호 암호화
 	@Bean // 비밀번호 암호화 기능 등록
