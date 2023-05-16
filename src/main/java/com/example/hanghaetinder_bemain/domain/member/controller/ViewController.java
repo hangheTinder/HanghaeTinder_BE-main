@@ -29,7 +29,7 @@ public class ViewController {
 	@GetMapping("/users")
 
 	public ResponseEntity<Message> users (@AuthenticationPrincipal final UserDetailsImpl userDetails){
-
+		return viewService.users(userDetails);
 
 	}
 
@@ -38,6 +38,6 @@ public class ViewController {
 
 	public ResponseEntity<Message> likedUser(@AuthenticationPrincipal final UserDetailsImpl userDetails){
 
-
+		return viewService.likedUser(userDetails);
 	}
 }
