@@ -21,6 +21,7 @@ import com.example.hanghaetinder_bemain.domain.member.entity.Favorite;
 import com.example.hanghaetinder_bemain.domain.member.entity.MatchMember;
 import com.example.hanghaetinder_bemain.domain.member.entity.Member;
 import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
+import com.example.hanghaetinder_bemain.domain.member.repository.MemberFavoriteRepository;
 import com.example.hanghaetinder_bemain.domain.security.jwt.JwtUtil;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatMessageRepository;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
@@ -60,6 +61,7 @@ public class MemberService {
 	private final MatchMemberRepository matchMemberRepository;
 	private final ChatRoomRepository chatRoomRepository;
 	private final ChatMessageRepository chatMessageRepository;
+	private final MemberFavoriteRepository memberFavoriteRepository;
 
 
 
@@ -165,10 +167,11 @@ public class MemberService {
 				normalUsers.add(user);
 			}
 		}
+
 		List<MemberResponseDto> result = new ArrayList<>();
 		for (Member members : normalUsers) {
-			result.add(new MemberResponseDto(members));
-
+			List<Long> favoriteList = memberFavoriteRepository.findByFavoriteList1(member.getId());
+			result.add(new MemberResponseDto(members, favoriteList));
 		}
 		//7. 리스트를 랜덤하게 섞는다
 		Collections.shuffle(result);
@@ -255,7 +258,8 @@ public class MemberService {
 		for (Long id : likeByUserIds) {
 			Member matchedMember = memberRepository.findById(id).orElseThrow(
 				() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-			result.add(new MemberResponseDto(matchedMember));
+			List<Long> favoriteList = memberFavoriteRepository.findByFavoriteList1(matchedMember.getId());
+			result.add(new MemberResponseDto(matchedMember, favoriteList));
 		}
 		//6.랜덤으로섞는다
 		Collections.shuffle(result);
@@ -284,7 +288,8 @@ public class MemberService {
 		for (Long id : matchedUserIds) {
 			Member matchedMember = memberRepository.findById(id).orElseThrow(
 				() -> new IllegalArgumentException("Invalid user id: " + id));
-			result.add(new MemberResponseDto(matchedMember));
+			List<Long> favoriteList = memberFavoriteRepository.findByFavoriteList1(matchedMember.getId());
+			result.add(new MemberResponseDto(matchedMember, favoriteList));
 		}
 		//이걸로 채팅방 목록을만들면될듯
 		return result;
