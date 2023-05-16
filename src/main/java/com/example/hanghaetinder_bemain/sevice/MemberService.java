@@ -7,7 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +51,6 @@ public class MemberService {
 
 	private final JwtUtil jwtUtil;
 	private final MemberRepository memberRepository;
-
 	private final FavoriteRepository favoriteRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final S3Uploader s3Uploader;
@@ -61,24 +60,26 @@ public class MemberService {
 	private final ChatRoomRepository chatRoomRepository;
 
 
-
-
 	@Transactional
 	public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+		// 유저아이디와 패스워드 dto에서 꺼내오기
 		String userId = loginRequestDto.getUserId();
 		String password = loginRequestDto.getPassword();
 
+		// 유저아이디가 존재하지 않으면 예외 처리
 		Member member = memberRepository.findByUserId(userId).orElseThrow(
 			() -> new CustomException(ResponseMessage.NOT_FOUND_USER));// 예외처리 해주기
 
+		//
 		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw new CustomException(ResponseMessage.NOT_Fail_USER);
+			throw new CustomException(ResponseMessage.INVALID_CREDENTIALS);
 		}
+
+		// 아이디 기반으로 토큰 생성하고 더하기
 
 		String accessToken = jwtUtil.createAccessToken(member.getUserId());
 
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
-		// System.out.println(accessToken);
 
 		return new LoginResponseDto(member.getNickname());
 	}

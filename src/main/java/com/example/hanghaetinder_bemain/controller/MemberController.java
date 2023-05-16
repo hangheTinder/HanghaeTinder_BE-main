@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.hanghaetinder_bemain.dto.http.DefaultDataRes;
@@ -42,16 +42,20 @@ public class MemberController {
 
 	//회원가입
 	@PostMapping(value = "user/signup" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity signup(@ModelAttribute SignupRequestDto signUpRequestDto) {
+	public ResponseEntity signup(@ModelAttribute SignupRequestDto signUpRequestDto, HttpServletResponse response) {
 
 		memberService.signup(signUpRequestDto);
 
+		response.setHeader("message", "회원가입성공");
 		return ResponseEntity.ok(new DefaultRes(ResponseMessage.CREATED_USER));
 	}
 
 	@PostMapping("user/login")
 	public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 		LoginResponseDto loginResponseDto = memberService.login(loginRequestDto, response);
+
+		response.setHeader("message", "로그인 성공");
+
 		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
 	}
 

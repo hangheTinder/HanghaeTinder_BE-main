@@ -10,12 +10,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final MemberRepository memberRepository;
 
+	// 스프링 시큐리티에서 인증을 처리할때.
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		Member member = memberRepository.findByUserId(userId)
