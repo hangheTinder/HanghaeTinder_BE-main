@@ -208,11 +208,11 @@ public class MemberService {
 	public boolean isLikedByMe(Member member, Member likedMember) {
 
 		// 현재 사용자가 좋아요를 누른 사용자의 목록을 가져옵니다.
-		List<LikeMember> likesByMe = likeMemberRepository.findAllByMember(member);
+		List<Member> likesByMe = likeMemberRepository.findAllByMember(member.getId());
 
 		// 가져온 목록에서 나를 좋아요 누른 사용자가 있는지 확인합니다.
-		for (LikeMember likeMember : likesByMe) {
-			if (likeMember.getLikedMember().getId().equals(likedMember.getId())) {
+		for (Member likeMember : likesByMe) {
+			if (likeMember.getId().equals(likedMember.getId())) {
 				return true;
 			}
 		}
@@ -246,12 +246,12 @@ public class MemberService {
 		Member member = findMemberById(userId);
 
 		//3. 나를 좋아요 누른사람을찾는다
-		List<LikeMember> likeMemberToUser = likeMemberRepository.findAllByLikedMember(member);
+		List<Member> likeMemberToUser = likeMemberRepository.findAllByLikedMember(member.getId());
 
 		//4. 나를누른사람의 user id 추출
 		List<Long> likeByUserIds = new ArrayList<>();
-		for (LikeMember like : likeMemberToUser) {
-			likeByUserIds.add(like.getLikedMember().getId());
+		for (Member like : likeMemberToUser) {
+			likeByUserIds.add(like.getId());
 		}
 		//5. 반환값
 		List<MemberResponseDto> result = new ArrayList<>();
@@ -266,8 +266,8 @@ public class MemberService {
 		return result;
 
 	}
-	//서로 좋아요를 눌러 매칭된 목록조회(수정필요)매치드로 집어넣기
-	@Transactional(readOnly = true)
+	//필요없는 부분
+/*	@Transactional(readOnly = true)
 	public List<MemberResponseDto> matched(UserDetailsImpl userDetails) {
 
 		//1.사용자 아이디를꺼낸다
@@ -293,16 +293,8 @@ public class MemberService {
 		}
 		//이걸로 채팅방 목록을만들면될듯
 		return result;
-	}
+	}*/
 	//채팅룸생성(보완필요)
-	@Transactional(readOnly = true)
-	public List<ChatRoom> getChatRooms(List<MemberResponseDto> matchedUsers, UserDetailsImpl userDetails) {
-		//1. 채팅룸 리스트 생성
-		List<ChatRoom> chatRooms = new ArrayList<>();
-
-
-		return chatRooms;
-	}
 
 	public Member findMemberById(Long id){
 		return memberRepository.findById(id).orElseThrow(
@@ -313,29 +305,29 @@ public class MemberService {
 		//3. 내가 싫어요를 누른사람과
 		List<DislikeMember> dislikesByUser = dislikeMemberRepository.findAllByMember(member);
 		//4. 나를 싫어요 누른사람을 담는다
-		List<DislikeMember> dislikesToUser = dislikeMemberRepository.findAllByDislikeMember(member);
+		List<DislikeMember> dislikesToUser = dislikeMemberRepository.findAllByDislikeMember(member.getId());
 		//7. 3번과 4번을 충족하는 유저id를 한곳에 넣어주고
 		List<Long> dislikeUserIds = new ArrayList<>();
 		for (DislikeMember dislike : dislikesByUser) {
-			dislikeUserIds.add(dislike.getDislikeMember().getId());
+			dislikeUserIds.add(dislike.getMember().getId());
 		}
 		for (DislikeMember dislike : dislikesToUser) {
-			dislikeUserIds.add(dislike.getDislikeMember().getId());
+			dislikeUserIds.add(dislike.getMember().getId());
 		}
 		return dislikeUserIds;
 	}
 
 	private List<Long> likeUser(Member member){
 		//내가 좋아요를 누른사람
-		List<LikeMember> likesByUser = likeMemberRepository.findAllByMember(member);
+		List<Member> likesByUser = likeMemberRepository.findAllByMember(member.getId());
 		//나를 좋아요를 누른사람
-		List<LikeMember> likesToUser = likeMemberRepository.findAllByLikedMember(member);
+		List<Member> likesToUser = likeMemberRepository.findAllByLikedMember(member.getId());
 		List<Long> likeUserIds = new ArrayList<>();
-		for (LikeMember like : likesByUser) {
-			likeUserIds.add(like.getLikedMember().getId());
+		for (Member like : likesByUser) {
+			likeUserIds.add(like.getId());
 		}
-		for (LikeMember like : likesToUser) {
-			likeUserIds.add(like.getLikedMember().getId());
+		for (Member like : likesToUser) {
+			likeUserIds.add(like.getId());
 		}
 		return likeUserIds;
 	}
