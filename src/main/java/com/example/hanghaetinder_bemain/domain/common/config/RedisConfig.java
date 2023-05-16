@@ -1,6 +1,7 @@
 
 package com.example.hanghaetinder_bemain.domain.common.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -34,7 +36,7 @@ public class RedisConfig {
 		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
 		return new LettuceConnectionFactory(redisStandaloneConfiguration);
 	}
-
+//채팅 메세지 템플릿
 	@Bean
 	public RedisTemplate<String, ChatMessage> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<String, ChatMessage> template = new RedisTemplate<>();
@@ -52,5 +54,19 @@ public class RedisConfig {
 		return template;
 	}
 
+	// 로그아웃 템플릿
+	@Bean
+	public RedisTemplate<String, String> user_redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		// string을 기반으로 하는 레디스 템플릿 만들기
+		RedisTemplate<String, String> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory);
+
+		// 문자열과 키의 값들을 직렬화 한다.
+		template.setKeySerializer(new GenericToStringSerializer<>(String.class));
+		template.setValueSerializer(new GenericToStringSerializer<>(String.class));
+
+
+		return template;
+	}
 
 }

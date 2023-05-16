@@ -1,8 +1,13 @@
 package com.example.hanghaetinder_bemain.domain.member.service;
 
+import static com.example.hanghaetinder_bemain.domain.common.dto.ResponseMessage.*;
+
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +15,7 @@ import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatRoom;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatMessageRepository;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
+import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
 import com.example.hanghaetinder_bemain.domain.member.entity.DislikeMember;
 import com.example.hanghaetinder_bemain.domain.member.entity.LikeMember;
 import com.example.hanghaetinder_bemain.domain.member.entity.MatchMember;
@@ -18,6 +24,8 @@ import com.example.hanghaetinder_bemain.domain.member.repository.DislikeMemberRe
 import com.example.hanghaetinder_bemain.domain.member.repository.LikeMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MemberRepository;
+import com.example.hanghaetinder_bemain.domain.member.util.Message;
+import com.example.hanghaetinder_bemain.domain.member.util.StatusEnum;
 import com.example.hanghaetinder_bemain.domain.security.UserDetailsImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +43,10 @@ public class ActiveService {
 	private final DislikeMemberRepository dislikeMemberRepository;
 	private final ChatRoomRepository chatRoomRepository;
 	@Transactional
-	public void likeToUsers(final Long userIdToLike, final UserDetailsImpl userDetails) {
+
+
+	public ResponseEntity<Message> likeToUsers(final Long userIdToLike,final UserDetailsImpl userDetails) {
+
 		//1. 사용자의 아이디를꺼낸다
 		Long userId = userDetails.getId();
 		//2. 좋아요를 눌려진 사용자를 찾는다
@@ -59,6 +70,12 @@ public class ActiveService {
 			matchMemberRepository.save(match);
 			chatRoomRepository.save(chatRoom);
 		}
+		Message message = Message.setSuccess(StatusEnum.OK, "좋아요 요청 성공");
+		return new ResponseEntity<>(message, HttpStatus.OK);
+
+
+
+
 	}
 	@Transactional
 	public boolean isLikedByMe(final Member member, final Member likedMember) {
@@ -78,7 +95,9 @@ public class ActiveService {
 
 	//싫어요 를 눌렀을때
 	@Transactional
-	public void dislikeToUsers(final Long userIdToDislike, final UserDetailsImpl userDetails) {
+
+	public ResponseEntity<Message> dislikeToUsers(final Long userIdToDislike,final UserDetailsImpl userDetails) {
+
 		//1.사용자의 아이디를 꺼내온다.
 		Long userId = userDetails.getId();
 		//2. 싫어요를 누르는 사용자를 찾는다,
@@ -90,10 +109,13 @@ public class ActiveService {
 		dislikeMember.setMember(member);
 		dislikeMember.setDislikeMember(memberToDislike);
 		dislikeMemberRepository.save(dislikeMember);
+
+		Message message = Message.setSuccess(StatusEnum.OK, "싫어요 요청 성공");
+		return new ResponseEntity<>(message, HttpStatus.OK);
 	}
 
 	public Member findMemberById(final Long id){
 		return memberRepository.findById(id).orElseThrow(
-			() -> new IllegalArgumentException("사용자를 찾을수가 없습니다"));
+			() -> new CustomException(NOT_FOUND_USER));
 	}
 }

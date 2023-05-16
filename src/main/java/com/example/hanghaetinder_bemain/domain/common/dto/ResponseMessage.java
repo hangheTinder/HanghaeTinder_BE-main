@@ -9,11 +9,9 @@ public class ResponseMessage {
 	public static final String Available_ID = "로그아웃 성공";
 
 	public static final String LOGOUT_FAIL = "로그아웃 실패";
-
 	public static final String READ_USER = "회원 정보 조회 성공";
 	public static final String NOT_FOUND_USER = "회원을 찾을 수 없습니다.";
-
-	public static final String NOT_Fail_USER = "아이디비밀번호가 일치하지 않습니다.";
+	public static final String  INVALID_CREDENTIALS= "비밀번호가 일치하지 않습니다.";
 	public static final String ALREADY_ENROLLED_USER = "이미 가입한 아이디입니다.";
 	public static final String CREATED_USER = "회원 가입 성공";
 	public static final String CREATED_USER_FAIL = "회원 가입 실패";
@@ -22,7 +20,7 @@ public class ResponseMessage {
 	public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
 	public static final String DB_ERROR = "데이터베이스 에러";
 	public static final String WRONG_ACCESS = "잘못된 접근입니다.";
-	public static final String WRONG_FORMAT = "형식에 맞추어 게시글을 작성해주세요.";
+	public static final String WRONG_FORMAT = "형식에 맞추어 회원가입폼을 작성해주세요.";
 	public static final String S3_ERROR = "S3 이미지 저장 에러";
 
 	public static final String BOARD_GET = "게시글 조회 성공";

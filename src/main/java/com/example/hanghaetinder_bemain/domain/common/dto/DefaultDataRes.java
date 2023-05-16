@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 public class DefaultDataRes<T> extends DefaultRes {
 	private T data;
-
-	public DefaultDataRes(String responseMessage, T data) {
-		super(responseMessage);
+	public DefaultDataRes(int statusCode, String responseMessage, T data) {
+		super(statusCode, responseMessage);
 		this.data = data;
 	}
 }

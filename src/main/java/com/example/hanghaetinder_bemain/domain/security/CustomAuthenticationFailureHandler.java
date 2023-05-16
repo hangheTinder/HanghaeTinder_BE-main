@@ -23,7 +23,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
-		String json = new ObjectMapper().writeValueAsString(new DefaultRes(exception.getMessage()));
+		String json = new ObjectMapper().writeValueAsString(new DefaultRes(403, exception.getMessage()));
 		response.getWriter().write(json);
 		//        // 로그인 실패 시 처리할 코드 작성하기
 		//        response.sendRedirect("/");

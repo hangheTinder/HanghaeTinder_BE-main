@@ -3,6 +3,7 @@ package com.example.hanghaetinder_bemain.domain.chat.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -22,6 +23,8 @@ import com.example.hanghaetinder_bemain.domain.chat.repository.ChatMessageReposi
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MemberRepository;
+import com.example.hanghaetinder_bemain.domain.member.util.Message;
+import com.example.hanghaetinder_bemain.domain.member.util.StatusEnum;
 import com.example.hanghaetinder_bemain.domain.security.UserDetailsImpl;
 import com.example.hanghaetinder_bemain.domain.member.service.MemberService;
 import com.example.hanghaetinder_bemain.domain.chat.service.ChatMessageService;
@@ -63,13 +66,16 @@ public class ChatController {
 	@GetMapping("/api/user/room")
 	public ResponseEntity<ChatRoomListDto> chatRooms(@AuthenticationPrincipal final UserDetailsImpl userDetails) {
 
+
 		Optional<Member> member = memberRepository.findById(userDetails.getId());
 		List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
 		if (matchMemberOptional.size() != 0) {
 			ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
-			return ResponseEntity.ok().body(chatRoomListDto);
+			Message message = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
+			return new ResponseEntity<>(message, HttpStatus.OK);
 		}
-		return ResponseEntity.notFound().build();
+		Message message = Message.setSuccess(StatusEnum.OK, "조회 결과 없음");
+		return new ResponseEntity<>(message, HttpStatus.OK);
 	}
 
 	@GetMapping("/api/user/chat/{id}")
