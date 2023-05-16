@@ -52,7 +52,6 @@ public class MemberService {
 
 	private final JwtUtil jwtUtil;
 	private final MemberRepository memberRepository;
-
 	private final FavoriteRepository favoriteRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final S3Uploader s3Uploader;

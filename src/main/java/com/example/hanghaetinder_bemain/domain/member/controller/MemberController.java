@@ -3,11 +3,14 @@ package com.example.hanghaetinder_bemain.domain.member.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,17 +41,22 @@ public class MemberController {
 	private final MemberService memberService;
 	//회원가입
 	@PostMapping(value = "user/signup" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity signup(@ModelAttribute SignupRequestDto signUpRequestDto) {
+	public ResponseEntity signup(@Valid SignupRequestDto signUpRequestDto, Errors errors) {
+
+		if (errors.hasErrors()) {
+			// 유효성 검사 실패 시 처리
+			return ResponseEntity.badRequest().body(new DefaultRes(400, "회원가입폼을 올바르게 작성해주세요."));
+		}
 
 		memberService.signup(signUpRequestDto);
 
-		return ResponseEntity.ok(new DefaultRes(ResponseMessage.CREATED_USER));
+		return ResponseEntity.ok(new DefaultRes(200,ResponseMessage.CREATED_USER));
 	}
 
 	@PostMapping("user/login")
 	public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 		LoginResponseDto loginResponseDto = memberService.login(loginRequestDto, response);
-		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
+		return ResponseEntity.ok(new DefaultDataRes<>(200,ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
 	}
 
 }

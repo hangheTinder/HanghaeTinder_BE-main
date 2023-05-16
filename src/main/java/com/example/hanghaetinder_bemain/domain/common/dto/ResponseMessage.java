@@ -20,7 +20,7 @@ public class ResponseMessage {
 	public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
 	public static final String DB_ERROR = "데이터베이스 에러";
 	public static final String WRONG_ACCESS = "잘못된 접근입니다.";
-	public static final String WRONG_FORMAT = "형식에 맞추어 게시글을 작성해주세요.";
+	public static final String WRONG_FORMAT = "형식에 맞추어 회원가입폼을 작성해주세요.";
 	public static final String S3_ERROR = "S3 이미지 저장 에러";
 
 	public static final String BOARD_GET = "게시글 조회 성공";

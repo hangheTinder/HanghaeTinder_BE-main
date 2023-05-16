@@ -7,10 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DefaultRes {
-	private String responseMessage;
+	private String message;
 
-	public DefaultRes(final String responseMessage) {
-		this.responseMessage = responseMessage;
+	private int statusCode;
+
+	public DefaultRes(final int statusCode,final String responseMessage) {
+		this.statusCode = statusCode;
+		this.message = responseMessage;
 	}
 }
 
