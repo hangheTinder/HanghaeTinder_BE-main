@@ -44,6 +44,4 @@ public class MemberResponseDto {
 		this.favorites = favoriteList;
 		this.img = member.getImg();
 	}
-
-
 }

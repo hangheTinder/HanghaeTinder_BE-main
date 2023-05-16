@@ -20,6 +20,7 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
   redis:
     host: localhost
     port: 6379
@@ -56,3 +57,10 @@ cloud:
 logging:
   level:
     org.hibernate.type.descriptor.sql: TRACE
+
+
+kakao:
+  authUrl: https://kauth.kakao.com/oauth/token
+  userApiUrl: https://kapi.kakao.com/v2/user/me
+  restapiKey: 9d74e2883178af8c02b33c2bdba84b95
+  redirectUrl: http://localhost:8080
