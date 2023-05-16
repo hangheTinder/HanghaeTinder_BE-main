@@ -93,7 +93,7 @@ public class MemberController {
 		}
 	}
 	@Operation(summary = "좋아요 유저목록", description = "사용자를 좋아요를 누른유저들을 보는메서드입니다..")
-	@GetMapping("/users/like/")
+	@GetMapping("/users/like")
 	public List<MemberResponseDto> likedUser(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response){
 
 		response.setHeader("Status-Code", "200");
