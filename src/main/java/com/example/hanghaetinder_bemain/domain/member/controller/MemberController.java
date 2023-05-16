@@ -24,6 +24,7 @@ import com.example.hanghaetinder_bemain.domain.member.dto.request.LoginRequestDt
 import com.example.hanghaetinder_bemain.domain.member.dto.request.SignupRequestDto;
 import com.example.hanghaetinder_bemain.domain.member.dto.resoponse.LoginResponseDto;
 import com.example.hanghaetinder_bemain.domain.member.dto.resoponse.MemberResponseDto;
+import com.example.hanghaetinder_bemain.domain.member.util.Message;
 import com.example.hanghaetinder_bemain.domain.security.UserDetailsImpl;
 import com.example.hanghaetinder_bemain.domain.member.service.MemberService;
 
@@ -38,17 +39,15 @@ public class MemberController {
 	private final MemberService memberService;
 	//회원가입
 	@PostMapping(value = "user/signup" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity signup(@ModelAttribute SignupRequestDto signUpRequestDto) {
+	public ResponseEntity<Message> signup(@ModelAttribute final SignupRequestDto signUpRequestDto) {
 
-		memberService.signup(signUpRequestDto);
-
-		return ResponseEntity.ok(new DefaultRes(ResponseMessage.CREATED_USER));
+		return memberService.signup(signUpRequestDto);
 	}
 
 	@PostMapping("user/login")
-	public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-		LoginResponseDto loginResponseDto = memberService.login(loginRequestDto, response);
-		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
+	public ResponseEntity<Message> login(@RequestBody final LoginRequestDto loginRequestDto, final HttpServletResponse  response) {
+
+		return	memberService.login(loginRequestDto, response);
 	}
 
 }
