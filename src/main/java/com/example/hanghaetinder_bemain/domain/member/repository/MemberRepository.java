@@ -3,6 +3,7 @@ package com.example.hanghaetinder_bemain.domain.member.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,8 +28,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 		"    SELECT 1 FROM LikeMember lm " +
 		"    WHERE (lm.likedMember.id = :targetMember OR lm.member.id = :targetMember) " +
 		"        AND (lm.likedMember.id = m.id OR lm.member.id = m.id)" +
-		")")
-	List<Member> findMembersExcludingLikesAndDislikes(@Param("targetMember") Long targetMember);
+		") ORDER BY RAND()")
+	List<Member> findMembersExcludingLikesAndDislikes(@Param("targetMember") Long targetMember, Pageable pagealbe);
 
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class ViewService {
 
 		Long userId = userDetails.getId();
 		Member member = findMemberById(userId);
-		List<Member> normalUsers = memberRepository.findMembersExcludingLikesAndDislikes(member.getId());
+		List<Member> normalUsers = memberRepository.findMembersExcludingLikesAndDislikes(member.getId(), PageRequest.of(0, 1));
 		List<MemberResponseDto> result = new ArrayList<>();
 		for (Member members : normalUsers) {
 			List<Long> favoriteList = memberFavoriteRepository.findByFavoriteList1(member.getId());
@@ -62,7 +63,7 @@ public class ViewService {
 
 		Member member = findMemberById(userId);
 
-		List<Member> likeMemberToUser = likeMemberRepository.findAllByLikedMember(member.getId());
+		List<Member> likeMemberToUser = likeMemberRepository.findAllByLikedMember(member.getId(), PageRequest.of(0, 1));
 
 		List<MemberResponseDto> result = new ArrayList<>();
 		for (Member findMember : likeMemberToUser) {
@@ -86,8 +87,8 @@ public class ViewService {
 		if (result.isEmpty()) {
 			return Message.setSuccess(StatusEnum.OK, "조회 결과 없음");
 		} else {
-			Collections.shuffle(result);
-			return Message.setSuccess(StatusEnum.OK, "조회 성공", result);
+			//Collections.shuffle(result);
+			return Message.setSuccess(StatusEnum.OK, "조회 성공", result.get(0));
 		}
 
 	}
