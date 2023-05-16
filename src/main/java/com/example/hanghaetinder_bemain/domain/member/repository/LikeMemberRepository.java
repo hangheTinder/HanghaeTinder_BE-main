@@ -14,7 +14,7 @@ public interface LikeMemberRepository extends JpaRepository<LikeMember,Long> {
 	@Query("SELECT distinct lm.likedMember from LikeMember lm where lm.member.id = :id")
 	List<Member> findAllByMember(@Param("id") Long id);
 
-	@Query("SELECT distinct lm.member from LikeMember lm where lm.likedMember.id = :id")
+	@Query("SELECT lm.member from LikeMember lm where lm.likedMember.id = :id group by lm.member.id")
 	List<Member> findAllByLikedMember(@Param("id") Long id);
 
 }
