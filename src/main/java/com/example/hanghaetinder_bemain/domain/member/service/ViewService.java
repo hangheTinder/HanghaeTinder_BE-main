@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
 import com.example.hanghaetinder_bemain.domain.member.dto.resoponse.MemberResponseDto;
-import com.example.hanghaetinder_bemain.domain.member.entity.DislikeMember;
 import com.example.hanghaetinder_bemain.domain.member.entity.Member;
 import com.example.hanghaetinder_bemain.domain.member.repository.DislikeMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.LikeMemberRepository;
@@ -38,7 +37,9 @@ public class ViewService {
 
 	//전체목록조회
 	@Transactional(readOnly = true)
+
 	public ResponseEntity<Message> users(final UserDetailsImpl userDetails) {
+
 		Long userId = userDetails.getId();
 		Member member = findMemberById(userId);
 		List<Member> normalUsers = memberRepository.findMembersExcludingLikesAndDislikes(member.getId());
@@ -54,7 +55,9 @@ public class ViewService {
 
 	//사용자를 좋아요누른사람 목록좋회
 	@Transactional(readOnly = true)
+
 	public ResponseEntity<Message> likedUser(final UserDetailsImpl userDetails) {
+
 		Long userId = userDetails.getId();
 
 		Member member = findMemberById(userId);

@@ -44,7 +44,9 @@ public class ActiveService {
 	private final ChatRoomRepository chatRoomRepository;
 	@Transactional
 
+
 	public ResponseEntity<Message> likeToUsers(final Long userIdToLike,final UserDetailsImpl userDetails) {
+
 		//1. 사용자의 아이디를꺼낸다
 		Long userId = userDetails.getId();
 		//2. 좋아요를 눌려진 사용자를 찾는다
@@ -76,7 +78,7 @@ public class ActiveService {
 
 	}
 	@Transactional
-	public boolean isLikedByMe(Member member, Member likedMember) {
+	public boolean isLikedByMe(final Member member, final Member likedMember) {
 
 		// 현재 사용자가 좋아요를 누른 사용자의 목록을 가져옵니다.
 		List<Member> likesByMe = likeMemberRepository.findAllByMember(member.getId());
@@ -93,7 +95,9 @@ public class ActiveService {
 
 	//싫어요 를 눌렀을때
 	@Transactional
+
 	public ResponseEntity<Message> dislikeToUsers(final Long userIdToDislike,final UserDetailsImpl userDetails) {
+
 		//1.사용자의 아이디를 꺼내온다.
 		Long userId = userDetails.getId();
 		//2. 싫어요를 누르는 사용자를 찾는다,
@@ -110,7 +114,7 @@ public class ActiveService {
 		return new ResponseEntity<>(message, HttpStatus.OK);
 	}
 
-	public Member findMemberById(Long id){
+	public Member findMemberById(final Long id){
 		return memberRepository.findById(id).orElseThrow(
 			() -> new CustomException(NOT_FOUND_USER));
 	}

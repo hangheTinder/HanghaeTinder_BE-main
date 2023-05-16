@@ -1,27 +1,30 @@
 package com.example.hanghaetinder_bemain.domain.member.service;
 
-
 import java.io.IOException;
+
 import java.util.Date;
 import java.util.HashMap;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hanghaetinder_bemain.domain.common.dto.ResponseMessage;
+import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
 import com.example.hanghaetinder_bemain.domain.member.dto.request.LoginRequestDto;
 import com.example.hanghaetinder_bemain.domain.member.dto.request.SignupRequestDto;
 import com.example.hanghaetinder_bemain.domain.member.dto.resoponse.LoginResponseDto;
-import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
 import com.example.hanghaetinder_bemain.domain.member.entity.Favorite;
-import com.example.hanghaetinder_bemain.domain.member.entity.MatchMember;
 import com.example.hanghaetinder_bemain.domain.member.entity.Member;
+
 import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
 import com.example.hanghaetinder_bemain.domain.member.repository.MemberFavoriteRepository;
 import com.example.hanghaetinder_bemain.domain.member.util.Message;
@@ -29,12 +32,12 @@ import com.example.hanghaetinder_bemain.domain.member.util.StatusEnum;
 import com.example.hanghaetinder_bemain.domain.security.jwt.JwtUtil;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatMessageRepository;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
+
 import com.example.hanghaetinder_bemain.domain.member.repository.FavoriteRepository;
-import com.example.hanghaetinder_bemain.domain.member.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MemberRepository;
-import com.example.hanghaetinder_bemain.domain.security.UserDetailsImpl;
 import com.example.hanghaetinder_bemain.domain.member.util.AgeCalculator;
 import com.example.hanghaetinder_bemain.domain.member.util.S3Uploader;
+ 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -45,6 +48,9 @@ import com.example.hanghaetinder_bemain.domain.member.entity.DislikeMember;
 import com.example.hanghaetinder_bemain.domain.member.entity.LikeMember;
 import com.example.hanghaetinder_bemain.domain.member.repository.DislikeMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.LikeMemberRepository;
+
+import com.example.hanghaetinder_bemain.domain.security.jwt.JwtUtil;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +68,9 @@ public class MemberService {
 	private final S3Uploader s3Uploader;
 
 	@Transactional
+
 	public ResponseEntity<Message> login(final LoginRequestDto loginRequestDto,final HttpServletResponse response) {
+
 
 		String userId = loginRequestDto.getUserId();
 		String password = loginRequestDto.getPassword();
@@ -87,7 +95,9 @@ public class MemberService {
 
 	//회원가입
 	@Transactional
+
 	public ResponseEntity<Message> signup(final SignupRequestDto signupRequestDto) {
+
 
 		if (signupRequestDto.getUserId() == null ||
 			signupRequestDto.getPassword() == null ||
