@@ -16,6 +16,11 @@ import com.example.hanghaetinder_bemain.domain.common.dto.ResponseMessage;
 import com.example.hanghaetinder_bemain.domain.member.dto.request.LoginRequestDto;
 import com.example.hanghaetinder_bemain.domain.member.dto.request.SignupRequestDto;
 import com.example.hanghaetinder_bemain.domain.member.dto.resoponse.LoginResponseDto;
+
+import com.example.hanghaetinder_bemain.domain.member.dto.resoponse.MemberResponseDto;
+import com.example.hanghaetinder_bemain.domain.member.util.Message;
+import com.example.hanghaetinder_bemain.domain.security.UserDetailsImpl;
+
 import com.example.hanghaetinder_bemain.domain.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,17 +34,19 @@ public class MemberController {
 
 	//회원가입
 	@PostMapping(value = "user/signup" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity signup(@ModelAttribute final SignupRequestDto signUpRequestDto) {
 
-		memberService.signup(signUpRequestDto);
+	public ResponseEntity<Message> signup(@ModelAttribute final SignupRequestDto signUpRequestDto) {
 
-		return ResponseEntity.ok(new DefaultRes(ResponseMessage.CREATED_USER));
+
+		return memberService.signup(signUpRequestDto);
 	}
 
 	@PostMapping("user/login")
-	public ResponseEntity login(@RequestBody final LoginRequestDto loginRequestDto, final HttpServletResponse response) {
-		final LoginResponseDto loginResponseDto = memberService.login(loginRequestDto, response);
-		return ResponseEntity.ok(new DefaultDataRes<>(ResponseMessage.LOGIN_SUCCESS, loginResponseDto));
+
+	public ResponseEntity<Message> login(@RequestBody final LoginRequestDto loginRequestDto, final HttpServletResponse  response) {
+
+		return	memberService.login(loginRequestDto, response);
+
 	}
 
 }
