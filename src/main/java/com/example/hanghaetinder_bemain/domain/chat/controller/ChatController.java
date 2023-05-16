@@ -64,8 +64,7 @@ public class ChatController {
 
 	@Transactional
 	@GetMapping("/api/user/room")
-	public ResponseEntity<ChatRoomListDto> chatRooms(@AuthenticationPrincipal final UserDetailsImpl userDetails) {
-
+	public ResponseEntity<Message> chatRooms(@AuthenticationPrincipal final UserDetailsImpl userDetails) {
 
 		Optional<Member> member = memberRepository.findById(userDetails.getId());
 		List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
