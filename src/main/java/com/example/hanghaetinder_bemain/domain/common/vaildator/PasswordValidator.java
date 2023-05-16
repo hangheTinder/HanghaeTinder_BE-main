@@ -8,6 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.example.hanghaetinder_bemain.domain.common.annotation.Password;
 
+// 패스워드를 검증합니다 .
 public class PasswordValidator implements ConstraintValidator<Password, String> {
 
 	@Override

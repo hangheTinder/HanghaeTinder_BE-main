@@ -23,7 +23,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
-		String json = new ObjectMapper().writeValueAsString(new DefaultRes("시큐리티에 의해 접근이 차단됩니다."));
+		String json = new ObjectMapper().writeValueAsString(new DefaultRes(401,"시큐리티에 의해 접근이 차단됩니다."));
 		response.getWriter().write(json);
 	}
 }

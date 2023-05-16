@@ -62,7 +62,6 @@ public class MemberService {
 
 	private final JwtUtil jwtUtil;
 	private final MemberRepository memberRepository;
-
 	private final FavoriteRepository favoriteRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final S3Uploader s3Uploader;
@@ -79,7 +78,7 @@ public class MemberService {
 			() -> new CustomException(ResponseMessage.NOT_FOUND_USER));// 예외처리 해주기
 
 		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw new CustomException(ResponseMessage.NOT_Fail_USER);
+			throw new CustomException(ResponseMessage.INVALID_CREDENTIALS);
 		}
 
 		String accessToken = jwtUtil.createAccessToken(member.getUserId());
