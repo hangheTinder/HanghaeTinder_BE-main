@@ -51,9 +51,9 @@ public class ChatController {
 	}
 
 	@GetMapping("/api/room/{Rid}/messages")
-	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable Long Rid) {
+	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable String Rid) {
 
-		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(Rid);
+		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(Rid);
 		if (chatRoomOptional.isPresent()) {
 			List<ChatMessage> chatMessages = chatMessageRepository.findByRoomIdOrderByCreatedAtAsc(chatRoomOptional.get().getRoomId());
 			ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
@@ -63,10 +63,11 @@ public class ChatController {
 	}
 
 	@Transactional
-	@GetMapping("/api/user/room/{id}")
-	public ResponseEntity<Message> chatRooms(@PathVariable Long id) {
+	@GetMapping("/api/user/room")
+	public ResponseEntity<ChatRoomListDto> chatRooms(@AuthenticationPrincipal final UserDetailsImpl userDetails) {
 
-		Optional<Member> member = memberRepository.findById(id);
+
+		Optional<Member> member = memberRepository.findById(userDetails.getId());
 		List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
 		if (matchMemberOptional.size() != 0) {
 			ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
