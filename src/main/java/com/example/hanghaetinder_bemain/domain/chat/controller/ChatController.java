@@ -56,10 +56,8 @@ public class ChatController {
 	@MessageMapping("/chat/message")
 	public void message(ChatMessage message) {
 
-		System.out.println("**********웹소켓 들어온다*********");
 		switch (message.getType()){
 			case ROOM:
-				System.out.println("**********ROOM*********");
 				System.out.println(message.getRoomId());
 				Optional<Member> member = memberRepository.findByUserId(message.getRoomId());
 				System.out.println(member.get().getUserId());
@@ -76,10 +74,9 @@ public class ChatController {
 				}
 				break;
 			case ENTER:
-				System.out.println("**********ENTER*********");
 				Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(message.getRoomId());
 				if (chatRoomOptional.isPresent()) {
-					Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").ascending());
+					Pageable pageable = PageRequest.of(message.getPage(), 10, Sort.by("createdAt").ascending());
 					Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomId(chatRoomOptional.get().getRoomId(), pageable);
 					ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
 					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatMessageListDto);
@@ -88,7 +85,6 @@ public class ChatController {
 				break;
 
 			case TALK:
-				System.out.println("**********TALK*********");
 				Optional<Member> nickname = memberRepository.findByUserId(message.getUserId());
 				ChatMessageListDto.ChatMessageDto messageDto = new ChatMessageListDto.ChatMessageDto(nickname.get().getUserId(), message.getMessage(), new Date());
 				ChatRoom chatRoom = chatRoomRepository.findRoomId(message.getRoomId());

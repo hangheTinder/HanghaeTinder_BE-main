@@ -42,6 +42,7 @@ public class ChatMessage extends Timestamped implements Serializable {
     private String sender; // 메시지 보낸사람
     private String message; // 메// 시지
     private Date createdAt;
+    private int page;
 
     public ChatMessage(MessageType type, String roomId, String sender, String message, Date createdAt, ChatRoom chatRoom) {
         this.type = type;
