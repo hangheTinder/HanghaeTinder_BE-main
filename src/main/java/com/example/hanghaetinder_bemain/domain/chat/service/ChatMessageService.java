@@ -2,10 +2,12 @@ package com.example.hanghaetinder_bemain.domain.chat.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +23,8 @@ import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
 import com.example.hanghaetinder_bemain.domain.member.entity.Member;
 import com.example.hanghaetinder_bemain.domain.member.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MemberRepository;
+import com.example.hanghaetinder_bemain.domain.member.util.Message;
+import com.example.hanghaetinder_bemain.domain.member.util.StatusEnum;
 
 import lombok.RequiredArgsConstructor;
 @EnableScheduling
@@ -33,6 +37,7 @@ public class ChatMessageService {
 	private final ChatRoomRepository chatRoomRepository;
 	private final MemberRepository memberRepository;
 	private final MatchMemberRepository matchMemberRepository;
+	private final SimpMessageSendingOperations messagingTemplate;
 
 	public void save(ChatMessage message) {
 		message.setCreatedAt(new Date());
@@ -53,4 +58,22 @@ public class ChatMessageService {
 			redisTemplate.delete(roomIdKey);
 		}
 	}
+	@Async
+	public CompletableFuture<Void> updateChatRoomListAsync(ChatMessage message) {
+		Optional<Member> member = memberRepository.findByUserId(message.getUserId());
+		List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
+		if (!matchMemberOptional.isEmpty()) {
+			ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
+			Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
+			messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), msg);
+		}
+		else{
+			ChatRoomListDto chatRoomListDto = new ChatRoomListDto();
+			Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
+			messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
+		}
+		return CompletableFuture.completedFuture(null);
+	}
+
+
 }
