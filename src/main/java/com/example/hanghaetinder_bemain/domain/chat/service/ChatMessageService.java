@@ -67,6 +67,11 @@ public class ChatMessageService {
 			Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
 			messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), msg);
 		}
+		else{
+			ChatRoomListDto chatRoomListDto = new ChatRoomListDto();
+			Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
+			messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
+		}
 		return CompletableFuture.completedFuture(null);
 	}
 

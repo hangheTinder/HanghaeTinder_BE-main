@@ -68,7 +68,9 @@ public class ChatController {
 					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
 				}
 				else{
-					System.out.println("매칭된사람이 없어");
+					ChatRoomListDto chatRoomListDto = new ChatRoomListDto();
+					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
+					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
 				}
 				break;
 			case ENTER:
