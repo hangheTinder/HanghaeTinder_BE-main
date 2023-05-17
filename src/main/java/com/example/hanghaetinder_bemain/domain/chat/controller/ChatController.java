@@ -80,7 +80,7 @@ public class ChatController {
 					Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomId(chatRoomOptional.get().getRoomId(), pageable);
 					ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
 					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatMessageListDto);
-					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), msg);
+					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
 				}
 				break;
 
@@ -97,7 +97,6 @@ public class ChatController {
 			default:
 				break;
 		}
-
 	}
 
 	//포스트맨 테스트용 소스
