@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
@@ -22,6 +23,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		System.out.println(session+"연결");
+		session.sendMessage(new TextMessage(session+"연결됫음 틴더 13조 무조건 됫음"));
 		sessions.add(session);
 	}
 

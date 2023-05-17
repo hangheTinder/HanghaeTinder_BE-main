@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,14 +50,51 @@ public class ChatController {
 	private final MatchMemberRepository matchMemberRepository;
 	private final MemberRepository memberRepository;
 
+	@Transactional
 	@MessageMapping("/chat/message")
 	public void message(ChatMessage message) {
 
 		System.out.println("**********웹소켓 들어온다*********");
-		chatMessageService.save(message);
+		switch (message.getType()){
+			case ROOM:
+				System.out.println("**********ROOM*********");
+				System.out.println(message.getRoomId());
+				Optional<Member> member = memberRepository.findByUserId(message.getRoomId());
+				System.out.println(member.get().getUserId());
+				List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
+				if (matchMemberOptional.size() != 0) {
+					ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
+					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
+					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
+				}
+				else{
+					System.out.println("매칭된사람이 없어");
+				}
+				break;
+			case ENTER:
+				System.out.println("**********ENTER*********");
+				Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(message.getRoomId());
+				if (chatRoomOptional.isPresent()) {
+					Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").ascending());
+					Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomId(chatRoomOptional.get().getRoomId(), pageable);
+					ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
+					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatMessageListDto);
+					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), msg);
+				}
+				break;
+
+			case TALK:
+				System.out.println("**********TALK*********");
+				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+				chatMessageService.updateChatRoomListAsync(message);
+				chatMessageService.save(message);
+				break;
+
+			default:
+				break;
+		}
 		System.out.println("******메세지는" + message);
-		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
-		messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), message);
+
 	}
 
 	@GetMapping("/api/room/{Rid}/messages")
