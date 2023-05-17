@@ -97,11 +97,11 @@ public class ChatController {
 			default:
 				break;
 		}
-		System.out.println("******메세지는" + message);
 
 	}
 
-	@GetMapping("/api/user/{Rid}/messages")
+	//포스트맨 테스트용 소스
+	/*@GetMapping("/api/user/{Rid}/messages")
 	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable String Rid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
 		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(Rid);
@@ -128,18 +128,7 @@ public class ChatController {
 		}
 		Message message = Message.setSuccess(StatusEnum.OK, "조회 결과 없음");
 		return new ResponseEntity<>(message, HttpStatus.OK);
-	}
+	}*/
 
-	@GetMapping("/api/user/chat/{id}")
-	public String roomDetail(@PathVariable Long id) {
-		//websocket
-		String RoomId = chatRoomRepository.findRoomnum(id).getRoomId();
-		return RoomId;
-	}
 
-	@GetMapping("/api/user-info")
-	@ResponseBody
-	public Member getUserName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return userDetails.getMember();
-	}
 }
