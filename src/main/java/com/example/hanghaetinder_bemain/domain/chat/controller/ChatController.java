@@ -62,9 +62,7 @@ public class ChatController {
 
 		switch (message.getType()){
 			case ROOM:
-				System.out.println(message.getRoomId());
 				Optional<Member> member = memberRepository.findByUserId(message.getRoomId());
-				System.out.println(member.get().getUserId());
 				List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
 				if (matchMemberOptional.size() != 0) {
 					ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
@@ -78,13 +76,15 @@ public class ChatController {
 				}
 				break;
 			case ENTER:
+				System.out.println("****enter**");
+				System.out.println("***get roomId"+message.getRoomId());
 				Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(message.getRoomId());
 				if (chatRoomOptional.isPresent()) {
 					Pageable pageable = PageRequest.of(message.getPage(), 10, Sort.by("createdAt").ascending());
 					Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomId(chatRoomOptional.get().getRoomId(), pageable);
 					ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
 					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatMessageListDto);
-					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
+					messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), msg);
 				}
 				break;
 
@@ -111,8 +111,6 @@ public class ChatController {
 
 
 	}
-
-
 
 	//포스트맨 테스트용 소스
 	/*@GetMapping("/api/user/{Rid}/messages")
