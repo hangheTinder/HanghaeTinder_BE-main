@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,12 +34,14 @@ import com.example.hanghaetinder_bemain.domain.chat.repository.ChatMessageReposi
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MemberRepository;
+import com.example.hanghaetinder_bemain.domain.member.service.ActiveService;
 import com.example.hanghaetinder_bemain.domain.member.util.Message;
 import com.example.hanghaetinder_bemain.domain.member.util.StatusEnum;
 import com.example.hanghaetinder_bemain.domain.security.UserDetailsImpl;
 import com.example.hanghaetinder_bemain.domain.member.service.MemberService;
 import com.example.hanghaetinder_bemain.domain.chat.service.ChatMessageService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -51,6 +54,7 @@ public class ChatController {
 	private final ChatRoomRepository chatRoomRepository;
 	private final MatchMemberRepository matchMemberRepository;
 	private final MemberRepository memberRepository;
+	private final ActiveService activeService;
 
 	@Transactional
 	@MessageMapping("/chat/message")
@@ -98,6 +102,17 @@ public class ChatController {
 				break;
 		}
 	}
+
+	@Operation(summary = "채팅방에서 사용자가 싫어요 누르고 나갔을때", description = "사용자가 싫어요를 하고 실행됬을 때 입니다")
+	@PostMapping("/api/users/dislike/{userId}/{roomId}")
+	public ResponseEntity<Message> dislikeUsers (@PathVariable final String userId, @PathVariable final String roomId){
+
+		return activeService.dislikeToUsersByRoom(userId, roomId);
+
+
+	}
+
+
 
 	//포스트맨 테스트용 소스
 	/*@GetMapping("/api/user/{Rid}/messages")
