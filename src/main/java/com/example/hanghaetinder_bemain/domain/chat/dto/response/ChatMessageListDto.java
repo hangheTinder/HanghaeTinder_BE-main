@@ -46,7 +46,6 @@ public class ChatMessageListDto {
 	}
 
 
-
 	public static ChatMessageListDto from(Page<ChatMessage> chatMessages) {
 		List<ChatMessageDto> chatMessageDtos = chatMessages.getContent().stream()
 			.map(chatMessage -> new ChatMessageDto(
