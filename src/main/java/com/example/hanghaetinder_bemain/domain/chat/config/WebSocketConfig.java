@@ -2,6 +2,7 @@ package com.example.hanghaetinder_bemain.domain.chat.config;
 
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketHandler;
@@ -13,9 +14,20 @@ import org.springframework.web.socket.config.annotation.WebSocketTransportRegist
 import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 
+import com.example.hanghaetinder_bemain.domain.chat.handler.StompHandler;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+	private final StompHandler stompHandler; // jwt 인증
+	@Override
+	public void configureClientInboundChannel(ChannelRegistration registration) {
+		registration.interceptors(stompHandler);
+	}
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -29,25 +41,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			.withSockJS();
 	}
 
-	@Override
-	public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-		registration.addDecoratorFactory(new WebSocketHandlerDecoratorFactory() {
-			@Override
-			public WebSocketHandler decorate(WebSocketHandler handler) {
-				return new WebSocketHandlerDecorator(handler) {
-					@Override
-					public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-						// WebSocket 연결이 수립된 후 호출되는 로직 작성
-						super.afterConnectionEstablished(session);
-					}
-
-					@Override
-					public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-						// WebSocket 연결이 종료된 후 호출되는 로직 작성
-						super.afterConnectionClosed(session, closeStatus);
-					}
-				};
-			}
-		});
-	}
 }

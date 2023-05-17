@@ -3,15 +3,24 @@ package com.example.hanghaetinder_bemain.domain.chat.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.example.hanghaetinder_bemain.domain.chat.dto.response.ChatRoomListDto;
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
+import com.example.hanghaetinder_bemain.domain.chat.entity.ChatRoom;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatMessageRepository;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
+import com.example.hanghaetinder_bemain.domain.common.dto.ResponseMessage;
+import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
+import com.example.hanghaetinder_bemain.domain.member.entity.Member;
+import com.example.hanghaetinder_bemain.domain.member.repository.MatchMemberRepository;
+import com.example.hanghaetinder_bemain.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 @EnableScheduling
@@ -22,6 +31,8 @@ public class ChatMessageService {
 	private final ChatMessageRepository chatMessageRepository;
 	private final RedisTemplate<String, ChatMessage> redisTemplate;
 	private final ChatRoomRepository chatRoomRepository;
+	private final MemberRepository memberRepository;
+	private final MatchMemberRepository matchMemberRepository;
 
 	public void save(ChatMessage message) {
 		message.setCreatedAt(new Date());
@@ -41,6 +52,5 @@ public class ChatMessageService {
 			chatMessageRepository.saveAll(chatMessages);
 			redisTemplate.delete(roomIdKey);
 		}
-
 	}
 }
