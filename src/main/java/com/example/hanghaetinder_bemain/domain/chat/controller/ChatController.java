@@ -90,10 +90,10 @@ public class ChatController {
 			case TALK:
 				System.out.println("**********TALK*********");
 				Optional<Member> nickname = memberRepository.findByUserId(message.getUserId());
-				ChatMessageListDto.ChatMessageDto messageDto = new ChatMessageListDto.ChatMessageDto(nickname.get().getNickname(), message.getMessage(), new Date());
+				ChatMessageListDto.ChatMessageDto messageDto = new ChatMessageListDto.ChatMessageDto(nickname.get().getUserId(), message.getMessage(), new Date());
 				ChatRoom chatRoom = chatRoomRepository.findRoomId(message.getRoomId());
-				ChatMessage chatMessage = new ChatMessage(message.getType(), message.getRoomId(), nickname.get().getNickname(), message.getMessage(), new Date(), chatRoom);
-				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), chatMessage);
+				ChatMessage chatMessage = new ChatMessage(message.getType(), message.getRoomId(), nickname.get().getUserId(), message.getMessage(), new Date(), chatRoom);
+				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), messageDto);
 				chatMessageService.updateChatRoomListAsync(message);
 				chatMessageService.save(chatMessage);
 				break;
@@ -105,7 +105,7 @@ public class ChatController {
 
 	}
 
-	@GetMapping("/api/room/{Rid}/messages")
+	@GetMapping("/api/user/{Rid}/messages")
 	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable String Rid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
 		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(Rid);
