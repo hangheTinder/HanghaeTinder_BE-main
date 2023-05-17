@@ -1,8 +1,10 @@
 package com.example.hanghaetinder_bemain.domain.chat.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,10 +56,8 @@ public class ChatController {
 	@MessageMapping("/chat/message")
 	public void message(ChatMessage message) {
 
-		System.out.println("**********웹소켓 들어온다*********");
 		switch (message.getType()){
 			case ROOM:
-				System.out.println("**********ROOM*********");
 				System.out.println(message.getRoomId());
 				Optional<Member> member = memberRepository.findByUserId(message.getRoomId());
 				System.out.println(member.get().getUserId());
@@ -74,32 +74,33 @@ public class ChatController {
 				}
 				break;
 			case ENTER:
-				System.out.println("**********ENTER*********");
 				Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(message.getRoomId());
 				if (chatRoomOptional.isPresent()) {
-					Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").ascending());
+					Pageable pageable = PageRequest.of(message.getPage(), 10, Sort.by("createdAt").ascending());
 					Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomId(chatRoomOptional.get().getRoomId(), pageable);
 					ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
 					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatMessageListDto);
-					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), msg);
+					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
 				}
 				break;
 
 			case TALK:
-				System.out.println("**********TALK*********");
-				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+				Optional<Member> nickname = memberRepository.findByUserId(message.getUserId());
+				ChatMessageListDto.ChatMessageDto messageDto = new ChatMessageListDto.ChatMessageDto(nickname.get().getUserId(), message.getMessage(), new Date());
+				ChatRoom chatRoom = chatRoomRepository.findRoomId(message.getRoomId());
+				ChatMessage chatMessage = new ChatMessage(message.getType(), message.getRoomId(), nickname.get().getUserId(), message.getMessage(), new Date(), chatRoom);
+				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), messageDto);
 				chatMessageService.updateChatRoomListAsync(message);
-				chatMessageService.save(message);
+				chatMessageService.save(chatMessage);
 				break;
 
 			default:
 				break;
 		}
-		System.out.println("******메세지는" + message);
-
 	}
 
-	@GetMapping("/api/room/{Rid}/messages")
+	//포스트맨 테스트용 소스
+	/*@GetMapping("/api/user/{Rid}/messages")
 	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable String Rid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
 		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(Rid);
@@ -126,18 +127,7 @@ public class ChatController {
 		}
 		Message message = Message.setSuccess(StatusEnum.OK, "조회 결과 없음");
 		return new ResponseEntity<>(message, HttpStatus.OK);
-	}
+	}*/
 
-	@GetMapping("/api/user/chat/{id}")
-	public String roomDetail(@PathVariable Long id) {
-		//websocket
-		String RoomId = chatRoomRepository.findRoomId(id).getRoomId();
-		return RoomId;
-	}
 
-	@GetMapping("/api/user-info")
-	@ResponseBody
-	public Member getUserName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return userDetails.getMember();
-	}
 }

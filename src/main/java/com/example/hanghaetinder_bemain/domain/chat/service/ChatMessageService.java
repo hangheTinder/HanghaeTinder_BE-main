@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hanghaetinder_bemain.domain.chat.dto.response.ChatRoomListDto;
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
@@ -39,8 +40,8 @@ public class ChatMessageService {
 	private final MatchMemberRepository matchMemberRepository;
 	private final SimpMessageSendingOperations messagingTemplate;
 
+
 	public void save(ChatMessage message) {
-		message.setCreatedAt(new Date());
 		redisTemplate.opsForList().rightPush(message.getRoomId().toString(), message);
 	}
 

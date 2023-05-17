@@ -1,5 +1,8 @@
 package com.example.hanghaetinder_bemain.domain.chat.dto.response;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
+import com.example.hanghaetinder_bemain.domain.chat.entity.ChatRoom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,17 +34,22 @@ public class ChatMessageListDto {
 	@NoArgsConstructor
 	public static class ChatMessageDto {
 		private Long id;
-		private ChatMessage.MessageType type;
 		private String sender;
 		private String message;
 		private String createdAt;
+		public ChatMessageDto(String sender, String message, Date createdAt) {
+			LocalDate localDate = new java.sql.Date(createdAt.getTime()).toLocalDate();
+			this.sender = sender;
+			this.message = message;
+			this.createdAt = localDate.toString();
+		}
 	}
+
 
 	public static ChatMessageListDto from(Page<ChatMessage> chatMessages) {
 		List<ChatMessageDto> chatMessageDtos = chatMessages.getContent().stream()
 			.map(chatMessage -> new ChatMessageDto(
 				chatMessage.getId(),
-				chatMessage.getType(),
 				chatMessage.getSender(),
 				chatMessage.getMessage(),
 				chatMessage.getCreatedAt().toString()
