@@ -44,8 +44,6 @@ public class ActiveService {
 	private final DislikeMemberRepository dislikeMemberRepository;
 	private final ChatRoomRepository chatRoomRepository;
 	@Transactional
-
-
 	public ResponseEntity<Message> likeToUsers(final Long userIdToLike,final UserDetailsImpl userDetails) {
 
 		//1. 사용자의 아이디를꺼낸다

@@ -49,7 +49,6 @@ public class ViewService {
 		for (Member members : normalUsers) {
 			List<Long> favoriteList = memberFavoriteRepository.findByFavoriteList1(member.getId());
 			result.add(new MemberResponseDto(members, favoriteList));
-			System.out.println(members.getNickname());
 		}
 
 		Message message = createMessage(result);
