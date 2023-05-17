@@ -54,10 +54,10 @@ public class ChatController {
 
 		System.out.println("**********웹소켓 들어온다*********");
 		chatMessageService.save(message);
-		System.out.println("******메세지는"+message);
+		System.out.println("******메세지는" + message);
 		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+		messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), message);
 	}
-
 
 	@GetMapping("/api/room/{Rid}/messages")
 	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable String Rid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {

@@ -21,11 +21,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		System.out.println(session+"연결");
 		sessions.add(session);
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		System.out.println(session+"연결 종료");
 		sessions.remove(session);
 	}
 

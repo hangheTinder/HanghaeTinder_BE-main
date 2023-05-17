@@ -1,5 +1,6 @@
 package com.example.hanghaetinder_bemain.domain.security.config;
 
+import com.example.hanghaetinder_bemain.domain.chat.handler.StompHandler;
 import com.example.hanghaetinder_bemain.domain.security.jwt.JwtAuthenticationFilter;
 import com.example.hanghaetinder_bemain.domain.security.jwt.JwtUtil;
 import com.example.hanghaetinder_bemain.domain.security.CustomAuthenticationEntryPoint;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -37,29 +39,23 @@ public class WebSecurityConfig {
 		"/v3/api-docs/**",
 		"/swagger-resources/**",
 		"/api-docs",
-		"/api/room/**",
-		"/ws-stomp/**",
+		"/ws-stomp/**", // 웹소켓 경로 추가
 	};
 	private final JwtUtil jwtUtil;
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
-
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring()
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 		// CSRF 설정
-		http.csrf().disable();
-
+		http.csrf().ignoringAntMatchers("/ws-stomp/**").disable(); // 웹소켓 경로에 대한 CSRF 비활성화
 		http.cors();
 		// 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
 		http.authorizeHttpRequests(authorize -> authorize
 				.shouldFilterAllDispatcherTypes(false)
 				.antMatchers(AUTH_WHITELIST)
@@ -69,14 +65,11 @@ public class WebSecurityConfig {
 				.authenticated()) // 그외의 요청들은 모두 인가 받아야 한다.
 			// JWT 인증/인가를 사용하기 위한 설정
 			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
 		// 401 에러 핸들링
 		http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
-
 		//SockJS를 위해
 		http.headers().frameOptions().sameOrigin();
 		http.formLogin().failureHandler(customAuthenticationFailureHandler).permitAll();
-
 		return http.build();
 	}
 
