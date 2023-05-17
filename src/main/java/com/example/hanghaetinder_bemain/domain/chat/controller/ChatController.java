@@ -1,5 +1,6 @@
 package com.example.hanghaetinder_bemain.domain.chat.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,9 +88,12 @@ public class ChatController {
 
 			case TALK:
 				System.out.println("**********TALK*********");
+				Optional<Member> nickname = memberRepository.findByUserId(message.getUserId());
+				ChatRoom chatRoom = chatRoomRepository.findRoomId(message.getRoomId());
+				ChatMessage chatMessage = new ChatMessage(message.getType(), message.getRoomId(), nickname.get().getNickname(), message.getMessage(), new Date(), chatRoom);
 				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
 				chatMessageService.updateChatRoomListAsync(message);
-				chatMessageService.save(message);
+				chatMessageService.save(chatMessage);
 				break;
 
 			default:
@@ -131,7 +135,7 @@ public class ChatController {
 	@GetMapping("/api/user/chat/{id}")
 	public String roomDetail(@PathVariable Long id) {
 		//websocket
-		String RoomId = chatRoomRepository.findRoomId(id).getRoomId();
+		String RoomId = chatRoomRepository.findRoomnum(id).getRoomId();
 		return RoomId;
 	}
 

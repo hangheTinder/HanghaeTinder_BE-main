@@ -30,7 +30,6 @@ public class ChatMessageListDto {
 	@NoArgsConstructor
 	public static class ChatMessageDto {
 		private Long id;
-		private ChatMessage.MessageType type;
 		private String sender;
 		private String message;
 		private String createdAt;
@@ -40,7 +39,6 @@ public class ChatMessageListDto {
 		List<ChatMessageDto> chatMessageDtos = chatMessages.getContent().stream()
 			.map(chatMessage -> new ChatMessageDto(
 				chatMessage.getId(),
-				chatMessage.getType(),
 				chatMessage.getSender(),
 				chatMessage.getMessage(),
 				chatMessage.getCreatedAt().toString()
