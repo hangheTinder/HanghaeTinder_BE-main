@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -89,9 +90,10 @@ public class ChatController {
 			case TALK:
 				System.out.println("**********TALK*********");
 				Optional<Member> nickname = memberRepository.findByUserId(message.getUserId());
+				ChatMessageListDto.ChatMessageDto messageDto = new ChatMessageListDto.ChatMessageDto(nickname.get().getNickname(), message.getMessage(), new Date());
 				ChatRoom chatRoom = chatRoomRepository.findRoomId(message.getRoomId());
 				ChatMessage chatMessage = new ChatMessage(message.getType(), message.getRoomId(), nickname.get().getNickname(), message.getMessage(), new Date(), chatRoom);
-				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+				messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), chatMessage);
 				chatMessageService.updateChatRoomListAsync(message);
 				chatMessageService.save(chatMessage);
 				break;
