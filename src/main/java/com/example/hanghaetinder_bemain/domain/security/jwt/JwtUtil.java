@@ -34,7 +34,7 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String AUTHORIZATION_KEY = "auth";
 	private static final String BEARER_PREFIX = "Bearer ";
-	private static final long TOKEN_TIME = 3000000L; // 10분으로 설정 600000L
+	private static final long TOKEN_TIME = 30000000L; // 10분으로 설정 600000L
 
 	@Value("${jwt.secret.access-key}")
 	private String accessSecretKey;

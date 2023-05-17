@@ -3,14 +3,17 @@ package com.example.hanghaetinder_bemain.domain.chat.entity;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 
 import com.example.hanghaetinder_bemain.domain.common.entity.Timestamped;
+import com.example.hanghaetinder_bemain.domain.member.entity.MatchMember;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +29,9 @@ public class ChatRoom extends Timestamped {
 
     private String roomId;
     private String name;
+
+    @OneToOne(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MatchMember matchMember;
 
     @OneToMany(mappedBy = "chatRoom")
     @OrderBy("createdAt DESC")
