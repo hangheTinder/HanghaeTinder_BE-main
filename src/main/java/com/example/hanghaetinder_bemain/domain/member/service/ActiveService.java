@@ -5,6 +5,7 @@ import static com.example.hanghaetinder_bemain.domain.common.dto.ResponseMessage
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,11 +105,24 @@ public class ActiveService {
 		Member member = findMemberById(userId);
 		//3. 싫어요를 당하는 사용차를 찾는다.
 		Member memberToDislike = findMemberById(userIdToDislike);
-		//4. DisLikeMember에 저장한다
 		DislikeMember dislikeMember = new DislikeMember();
 		dislikeMember.setMember(member);
 		dislikeMember.setDislikeMember(memberToDislike);
 		dislikeMemberRepository.save(dislikeMember);
+
+		Message message = Message.setSuccess(StatusEnum.OK, "싫어요 요청 성공");
+		return new ResponseEntity<>(message, HttpStatus.OK);
+
+	}
+
+	public ResponseEntity<Message> dislikeToUsersByRoom(String userId, String roomId) {
+		Optional<Member> member = memberRepository.findByUserId(userId);
+		ChatRoom chatRoom = chatRoomRepository.findRoomId(roomId);
+		Member memberToDislike = matchMemberRepository.findMemeberForDislke(member.get(), chatRoom);
+		if(matchMemberRepository.existsByMember(memberToDislike)){
+			likeMemberRepository.deleteMember(member.get(), memberToDislike);
+			chatRoomRepository.deleteByRoomId(roomId);
+		}
 
 		Message message = Message.setSuccess(StatusEnum.OK, "싫어요 요청 성공");
 		return new ResponseEntity<>(message, HttpStatus.OK);
@@ -118,4 +132,6 @@ public class ActiveService {
 		return memberRepository.findById(id).orElseThrow(
 			() -> new CustomException(NOT_FOUND_USER));
 	}
+
+
 }
