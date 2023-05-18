@@ -4,20 +4,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatRoom;
+import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Component
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class ChatRoomListDto {
 
 	private List<ChatRoomDto> chatRooms;
+
+	public ChatRoomListDto(List<ChatRoomDto> chatRooms) {
+		this.chatRooms = chatRooms;
+	}
 
 	@Getter
 	@Setter
@@ -29,18 +38,6 @@ public class ChatRoomListDto {
 		private String roomId;
 		private Date lastMsgDate;
 		private String lastMsg;
-	}
-	public static ChatRoomListDto from(List<ChatRoom> chatRooms) {
-		List<ChatRoomDto> chatRoomDtos = chatRooms.stream()
-			.map(chatRoom -> new ChatRoomListDto.ChatRoomDto(
-				chatRoom.getId(),
-				chatRoom.getName(),
-				chatRoom.getRoomId(),
-				chatRoom.getMessages().get(0).getCreatedAt(),
-				chatRoom.getMessages().get(0).getMessage()))
-			.collect(Collectors.toList());
-
-		return new ChatRoomListDto(chatRoomDtos);
 	}
 
 }

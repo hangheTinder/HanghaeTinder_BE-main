@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
@@ -64,7 +66,20 @@ public class ChatMessageService {
 		Optional<Member> member = memberRepository.findByUserId(message.getUserId());
 		List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
 		if (!matchMemberOptional.isEmpty()) {
-			ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
+			List<ChatRoomListDto.ChatRoomDto> chatRoomDtos = matchMemberOptional.stream()
+				.map(chatRoom -> {
+					List<ChatMessage> latestMessages = chatMessageRepository.findLatestMessageByRoomId(chatRoom.getRoomId(), PageRequest.of(0, 1));
+					ChatMessage latestMessage = latestMessages.isEmpty() ? null : latestMessages.get(0);
+					return new ChatRoomListDto.ChatRoomDto(
+						chatRoom.getId(),
+						chatRoom.getName(),
+						chatRoom.getRoomId(),
+						latestMessage != null ? latestMessage.getCreatedAt() : null,
+						latestMessage != null ? latestMessage.getMessage() : null
+					);
+				})
+				.collect(Collectors.toList());
+			ChatRoomListDto chatRoomListDto = new ChatRoomListDto(chatRoomDtos);
 			Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
 			messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getUserId(), msg);
 		}

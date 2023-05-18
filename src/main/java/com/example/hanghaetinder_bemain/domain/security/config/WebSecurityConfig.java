@@ -81,6 +81,7 @@ public class WebSecurityConfig {
 		config.addAllowedOrigin("http://localhost:3000");
 		config.addAllowedOrigin("http://localhost:8080");
 		config.addAllowedOrigin("http://hanghae-tinder-clone.s3-website.ap-northeast-2.amazonaws.com:3000");
+		config.addAllowedOrigin("http://hanghae-tinder-clone.s3-website.ap-northeast-2.amazonaws.com");
 		config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
 		config.addAllowedMethod("*");
 		config.addAllowedHeader("*");

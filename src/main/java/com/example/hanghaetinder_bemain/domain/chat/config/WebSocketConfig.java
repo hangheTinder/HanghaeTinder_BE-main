@@ -42,7 +42,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	}
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/ws-stomp").setAllowedOrigins("http://localhost:8080", "http://localhost:3000")
+		registry.addEndpoint("/ws-stomp").setAllowedOrigins("http://localhost:8080", "http://localhost:3000","http://hanghae-tinder-clone.s3-website.ap-northeast-2.amazonaws.com")
 			.withSockJS();
 	}
 
