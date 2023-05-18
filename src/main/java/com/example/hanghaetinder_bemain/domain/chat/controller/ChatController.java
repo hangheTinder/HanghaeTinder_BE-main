@@ -3,6 +3,7 @@ package com.example.hanghaetinder_bemain.domain.chat.controller;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Page;
@@ -62,10 +63,25 @@ public class ChatController {
 
 		switch (message.getType()){
 			case ROOM:
+				System.out.println("****room**");
+				System.out.println("***get roomId"+message.getRoomId());
 				Optional<Member> member = memberRepository.findByUserId(message.getRoomId());
 				List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
-				if (matchMemberOptional.size() != 0) {
-					ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
+				if (!matchMemberOptional.isEmpty()) {
+					List<ChatRoomListDto.ChatRoomDto> chatRoomDtos = matchMemberOptional.stream()
+						.map(chatRoom -> {
+							List<ChatMessage> latestMessages = chatMessageRepository.findLatestMessageByRoomId(chatRoom.getRoomId(), PageRequest.of(0, 1));
+							ChatMessage latestMessage = latestMessages.isEmpty() ? null : latestMessages.get(0);
+							return new ChatRoomListDto.ChatRoomDto(
+								chatRoom.getId(),
+								chatRoom.getName(),
+								chatRoom.getRoomId(),
+								latestMessage != null ? latestMessage.getCreatedAt() : null,
+								latestMessage != null ? latestMessage.getMessage() : null
+							);
+						})
+						.collect(Collectors.toList());
+					ChatRoomListDto chatRoomListDto = new ChatRoomListDto(chatRoomDtos);
 					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
 					messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(), msg);
 				}
@@ -80,7 +96,7 @@ public class ChatController {
 				System.out.println("***get roomId"+message.getRoomId());
 				Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(message.getRoomId());
 				if (chatRoomOptional.isPresent()) {
-					Pageable pageable = PageRequest.of(message.getPage(), 10, Sort.by("createdAt").ascending());
+					Pageable pageable = PageRequest.of(message.getPage(), 10, Sort.by("createdAt").descending());
 					Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomId(chatRoomOptional.get().getRoomId(), pageable);
 					ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
 					Message msg = Message.setSuccess(StatusEnum.OK, "조회 성공", chatMessageListDto);
@@ -112,13 +128,12 @@ public class ChatController {
 
 	}
 
-	//포스트맨 테스트용 소스
-	/*@GetMapping("/api/user/{Rid}/messages")
+	@GetMapping("/api/user/{Rid}/messages")
 	public ResponseEntity<ChatMessageListDto> roomMessages(@PathVariable String Rid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
 		Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByRoomId(Rid);
 		if (chatRoomOptional.isPresent()) {
-			Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
+			Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 			Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomId(chatRoomOptional.get().getRoomId(), pageable);
 
 			ChatMessageListDto chatMessageListDto = ChatMessageListDto.from(chatMessages);
@@ -133,14 +148,29 @@ public class ChatController {
 
 		Optional<Member> member = memberRepository.findById(userDetails.getId());
 		List<ChatRoom> matchMemberOptional = matchMemberRepository.findMatchmember(member.get().getId());
-		if (matchMemberOptional.size() != 0) {
-			ChatRoomListDto chatRoomListDto = ChatRoomListDto.from(matchMemberOptional);
+
+		if (!matchMemberOptional.isEmpty()) {
+			List<ChatRoomListDto.ChatRoomDto> chatRoomDtos = matchMemberOptional.stream()
+				.map(chatRoom -> {
+					List<ChatMessage> latestMessages = chatMessageRepository.findLatestMessageByRoomId(chatRoom.getRoomId(), PageRequest.of(0, 1));
+					ChatMessage latestMessage = latestMessages.isEmpty() ? null : latestMessages.get(0);
+					return new ChatRoomListDto.ChatRoomDto(
+						chatRoom.getId(),
+						chatRoom.getName(),
+						chatRoom.getRoomId(),
+						latestMessage != null ? latestMessage.getCreatedAt() : null,
+						latestMessage != null ? latestMessage.getMessage() : null
+					);
+				})
+				.collect(Collectors.toList());
+			ChatRoomListDto chatRoomListDto = new ChatRoomListDto(chatRoomDtos);
 			Message message = Message.setSuccess(StatusEnum.OK, "조회 성공", chatRoomListDto);
 			return new ResponseEntity<>(message, HttpStatus.OK);
 		}
+
 		Message message = Message.setSuccess(StatusEnum.OK, "조회 결과 없음");
 		return new ResponseEntity<>(message, HttpStatus.OK);
-	}*/
+	}
 
 
 }
