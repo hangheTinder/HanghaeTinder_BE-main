@@ -14,15 +14,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hanghaetinder_bemain.domain.chat.dto.response.ChatRoomListDto;
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatMessage;
 import com.example.hanghaetinder_bemain.domain.chat.entity.ChatRoom;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatMessageRepository;
 import com.example.hanghaetinder_bemain.domain.chat.repository.ChatRoomRepository;
-import com.example.hanghaetinder_bemain.domain.common.dto.ResponseMessage;
-import com.example.hanghaetinder_bemain.domain.common.exception.CustomException;
 import com.example.hanghaetinder_bemain.domain.member.entity.Member;
 import com.example.hanghaetinder_bemain.domain.member.repository.MatchMemberRepository;
 import com.example.hanghaetinder_bemain.domain.member.repository.MemberRepository;

@@ -26,6 +26,7 @@ public class ChatMessageListDto {
 	private List<ChatMessageDto> chatMessages;
 	private long totalElements;
 	private int totalPages;
+	private int page;
 
 
 	@Getter
@@ -42,6 +43,7 @@ public class ChatMessageListDto {
 			this.sender = sender;
 			this.message = message;
 			this.createdAt = localDate.toString();
+
 		}
 	}
 
@@ -60,6 +62,7 @@ public class ChatMessageListDto {
 		chatMessageListDto.setChatMessages(chatMessageDtos);
 		chatMessageListDto.setTotalElements(chatMessages.getTotalElements());
 		chatMessageListDto.setTotalPages(chatMessages.getTotalPages());
+		chatMessageListDto.setPage(chatMessageListDto.getPage());
 
 		return chatMessageListDto;
 
