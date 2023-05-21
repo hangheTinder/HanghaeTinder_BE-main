@@ -1,5 +1,5 @@
 name: hanghaetinder
-run-name: Running
+run-name: Running    
 on:
   push:
     branches:
@@ -14,7 +14,7 @@ env:
 
 jobs:
   build-with-gradle:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-20.04 # build-with-gradle이라는 job 정의. 이 job은 ubuntu-20.04 환경에서 실행.
     steps:
     - name: develop 브랜치로 이동
       uses: actions/checkout@v3
